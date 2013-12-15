@@ -8,9 +8,7 @@ import com.tooling4sensor.ide.storage.types.StorageFactory;
 import com.tooling4sensor.ide.storage.types.StorageFile;
 import com.tooling4sensor.ide.storage.types.StorageType;
 import com.tooling4sensor.ide.user.Account;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,26 +36,6 @@ public class ProjectOpenController
         this.storageDao = storageDao;
     }
     
-    @RequestMapping( value = "/project/index" )
-    public String index( HttpServletRequest request , Model model )
-    {
-        Account user = (Account) request.getSession().getAttribute( "user" );
-        List<Project> projectList = projectDao.list( user.getUserId() );
-        List<Storage> storageList = storageDao.list( user.getUserId() );
-        
-        Map<Long,Storage> map = new HashMap<>();
-        for( Storage s : storageList )
-        {
-            map.put( s.getStorageId() , s );
-        }
-        
-        model.addAttribute( "username" , user.getName() );
-        model.addAttribute( "projectList" , projectList );
-        model.addAttribute( "storageMap" , map );
-        
-        return "project/index";
-    }
-    
     @RequestMapping( value = "/project/{id}" )
     public String open( @PathVariable Long id , Model model , HttpServletRequest request ) throws Exception
     {
@@ -79,7 +57,13 @@ public class ProjectOpenController
         model.addAttribute( "username"      , user.getName() );
         model.addAttribute( "projectJsTree" , xml            );
         
-        return "project/project";
+        ProjectModel projectModel = new ProjectModel( model );
+        projectModel.setUser( user );
+        projectModel.setBody( "project" );
+        projectModel.setTitle( "index" );
+        projectModel.setMenu( "menu" );
+        
+        return projectModel.getJSP();
     }
     
     @RequestMapping( value = "/project/open/{id}" ) //, method = RequestMethod.POST

@@ -41,7 +41,7 @@ public class LoginController
         else
         {
             request.getSession().setAttribute( "user" , account );
-            return "redirect:project.index";
+            return "redirect:project/index";
         }
     }
 }

@@ -28,7 +28,7 @@ public class ProjectDAO
 
         try
         {
-            manager.getTransaction().begin();    
+            manager.getTransaction().begin();
             manager.persist( project );
             manager.getTransaction().commit();
         }

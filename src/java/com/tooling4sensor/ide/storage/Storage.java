@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.Map;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -17,7 +17,7 @@ import javax.persistence.Table;
 public class Storage implements Serializable
 {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long storageId;
     private long userId;
     private int type;
