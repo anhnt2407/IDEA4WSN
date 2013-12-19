@@ -81,14 +81,14 @@ function openProject( project_id )
         
         "html_data" :
         {
-            "ajax" : { "url" : "project/open/" + project_id }
+            "ajax" : { "url" : "/IDEA4WSN/project/open/" + project_id }
         } ,
         
         // the `plugins` array allows you to configure the active plugins on this instance
         "plugins" : [ "themes" , "html_data" , "ui" , "crrm" , "hotkeys" , "contextmenu" , "unique" ]
     });
     
-    document.title = '[IDEA4WSN] Project ' + project_id;
+    //document.title = '[IDEA4WSN] Project ' + project_id;
     
     // INSTANCES
     // 1) you can call most functions just by selecting the container and calling `.jstree("func",`
@@ -104,7 +104,7 @@ function initJsTree()
         "types"  : js_tree_types ,
         
         // the `plugins` array allows you to configure the active plugins on this instance
-        "plugins" : [ "themes" , "ui" , "crrm" , "hotkeys" , "contextmenu" , "unique" ]
+        "plugins" : [ "themes" , "html_data", "ui" , "crrm" , "hotkeys" , "contextmenu" , "unique" ]
     });
 }
 
@@ -123,14 +123,14 @@ $( function ()
 {
     initJsTree();
     
-    $('#buttonOpenProject').click( function (e) {
-        openProject( "/home/avld/Aulas" );
-    });
+//    $('#buttonOpenProject').click( function (e) {
+//        openProject( "/home/avld/Aulas" );
+//    });
     
-    $('#buttonReloadProject').click( function (e) {
-        if( current_project != null )
-        {
-            openProject( current_project );
-        }
-    });
+//    $('#buttonReloadProject').click( function (e) {
+//        if( current_project != null )
+//        {
+//            openProject( current_project );
+//        }
+//    });
 });

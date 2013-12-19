@@ -4,7 +4,7 @@
           
           <div>
               <div align="right">
-                  <span class="glyphicon glyphicon-refresh" id="buttonReloadProject"></span>
+                  <span class="glyphicon glyphicon-refresh" id="buttonReloadProject" onclick="openProject( ${projectId} )"></span>
               </div>
               
               <hr style="margin: 1px 0;" />

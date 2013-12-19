@@ -35,7 +35,7 @@ function registerComposeButtonEvent() {
         $('.nav-tabs').append('<li><a href="#' + tabId + '"><button class="close closeTab" type="button" >×</button>Compose</a></li>');
         $('.tab-content').append('<div class="tab-pane" id="' + tabId + '"></div>');
 
-        craeteNewTabAndLoadUrl("", "./SamplePage.html", "#" + tabId);
+        craeteNewTabAndLoadUrl( "" , "/IDEA4WSN/project/1/file?file=/Blink/teste.txt" , "#" + tabId );
 
         $(this).tab('show');
         showTab(tabId);

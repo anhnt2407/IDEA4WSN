@@ -5,6 +5,7 @@ import com.tooling4sensor.ide.storage.types.StorageFile;
 import com.tooling4sensor.ide.storage.types.StorageType;
 import com.tooling4sensor.ide.storage.types.StorageValidate;
 import java.io.File;
+import java.io.FileInputStream;
 
 /**
  *
@@ -63,14 +64,15 @@ public class LocalStorageType implements StorageType
     public void desconnect() throws Exception
     {
         this.storage = null;
+        this.rootDir = null;
     }
 
+    // -----------------------------
+    
     @Override
     public StorageFile open( String path ) throws Exception
     {
-        StorageValidate.path( path );
-        
-        File f = new File( rootDir.getPath() + path );
+        File f = file( path );
         
         if( !f.exists() )
         {
@@ -86,10 +88,8 @@ public class LocalStorageType implements StorageType
     @Override
     public void rename( String path , String newName ) throws Exception
     {
-        StorageValidate.path( path );
-        
-        File f = new File( rootDir.getPath() + path );
-        f.renameTo( new File( f.getParent() + newName ) );
+        File f = file( path );
+        f.renameTo( new File( f.getParent() + "/" + newName ) );
         
         f = null;
     }
@@ -97,9 +97,7 @@ public class LocalStorageType implements StorageType
     @Override
     public void delete( String path ) throws Exception
     {
-        StorageValidate.path( path );
-        
-        File f = new File( rootDir.getPath() + path );
+        File f = file( path );
         delete( f );
         
         f = null;
@@ -123,8 +121,8 @@ public class LocalStorageType implements StorageType
         StorageValidate.path( pathOriginal );
         StorageValidate.path( pathNew );
         
-        File f = new File( rootDir.getPath() + pathOriginal );
-        f.renameTo( new File( rootDir.getPath() + pathNew ) );
+        File f = file( pathOriginal );
+        f.renameTo( file( pathNew ) );
         
         f = null;
     }
@@ -136,9 +134,7 @@ public class LocalStorageType implements StorageType
     @Override
     public void createFile( String path ) throws Exception
     {
-        StorageValidate.path( path );
-        
-        File f = new File( rootDir.getPath() + path );
+        File f = file( path );
         f.createNewFile();
         
         f = null;
@@ -147,7 +143,23 @@ public class LocalStorageType implements StorageType
     @Override
     public byte[] getFile( String path ) throws Exception
     {
-        return null;
+        File f = file( path );
+        
+        if( f.isDirectory() )
+        {
+            throw new Exception( "It is a directory." );
+        }
+        else if( f.length() > 1024 * 1024 * 10 ) // (10 Mb)
+        {
+            throw new Exception( "This file size is more than 10 Mb." );
+        }
+        
+        byte[] data = new byte[ (int) f.length() ];
+        
+        FileInputStream fos = new FileInputStream( f );
+        int size = fos.read( data );
+        
+        return data;
     }
 
     private void deleteFile( File f ) throws Exception
@@ -162,9 +174,7 @@ public class LocalStorageType implements StorageType
     @Override
     public void createDir( String path ) throws Exception
     {
-        StorageValidate.path( path );
-        
-        File f = new File( rootDir.getPath() + path );
+        File f = file( path );
         f.mkdirs();
         
         f = null;
@@ -181,6 +191,24 @@ public class LocalStorageType implements StorageType
         }
         
         dir.delete();
+    }
+    
+    // ----------------------------
+    
+    private File file( String path ) throws Exception
+    {
+        StorageValidate.path( path );
+        
+        if( storage == null )
+        {
+            throw new Exception( "It is necessary connect first." );
+        }
+        
+        String f = path.startsWith( rootDir.getPath() ) 
+                        ? path 
+                        : rootDir.getPath() + path;
+        
+        return new File( f );
     }
     
 }

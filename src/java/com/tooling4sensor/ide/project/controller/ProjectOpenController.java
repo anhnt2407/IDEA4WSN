@@ -56,11 +56,12 @@ public class ProjectOpenController
         
         model.addAttribute( "username"      , user.getName() );
         model.addAttribute( "projectJsTree" , xml            );
+        model.addAttribute( "projectId"     , project.getProjectId() );
         
         ProjectModel projectModel = new ProjectModel( model );
         projectModel.setUser( user );
         projectModel.setBody( "project" );
-        projectModel.setTitle( "index" );
+        projectModel.setTitle( project.getName() );
         projectModel.setMenu( "menu" );
         
         return projectModel.getJSP();
@@ -96,9 +97,10 @@ public class ProjectOpenController
         String name = "<a href='#'>" + file.getName() + "</a> \n";
         
         StringBuilder builder = new StringBuilder();
-        builder.append( "<li id='root' rel='project'> \n" );
+        builder.append( "<ul>" );
+        builder.append( "<li id='root' rel='project'>" );
         builder.append( name );
-        builder.append( "<ul> \n" );
+        builder.append( "<ul>" );
         
         List<StorageFile> lista = file.getChildren();
         for( int i = 0 ; i < lista.size() ; i++ )
@@ -109,8 +111,9 @@ public class ProjectOpenController
             children( builder , _last , _file );
         }
         
-        builder.append( "</ul> \n" );
-        builder.append( "</li> \n" );
+        builder.append( "</ul>" );
+        builder.append( "</li>" );
+        builder.append( "</ul>" );
         
         return builder.toString();
     }
@@ -123,8 +126,8 @@ public class ProjectOpenController
         String liClass = file.isDirectory() ? "jstree-closed" : "jstree-leaf";
         liClass       += last ? " jstree-last" : "";
         
-        String li   = "<li id='"+ liId +"' rel='"+ type +"'> \n";
-        String name = "<a href='#'>" + file.getName() + "</a> \n";
+        String li   = "<li id='"+ liId +"' rel='"+ type +"'>";
+        String name = "<a href='#'>" + file.getName() + "</a>";
         
         builder.append( li   );
         builder.append( name );
@@ -132,7 +135,7 @@ public class ProjectOpenController
         //Tem que ser diretorio e ter filhos
         if( file.isDirectory() && file.hasChildren() )
         {
-            builder.append( "<ul> \n" );
+            builder.append( "<ul>" );
             
             List<StorageFile> lista = file.getChildren();
             for( int i = 0 ; i < lista.size() ; i++ )
@@ -143,10 +146,10 @@ public class ProjectOpenController
                 children( builder , _last , _file );
             }
             
-            builder.append( "</ul> \n" );
+            builder.append( "</ul>" );
         }
         
-        builder.append( "</li> \n" );
+        builder.append( "</li>" );
         
         // Last ......: jstree-last
         // Directory .: jstree-closed
