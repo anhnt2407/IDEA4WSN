@@ -1,6 +1,21 @@
 package com.tooling4sensor.ide.project.controller;
 
+import com.tooling4sensor.ide.project.Project;
+import com.tooling4sensor.ide.project.dao.FileOpennedDAO;
+import com.tooling4sensor.ide.project.dao.ProjectDAO;
+import com.tooling4sensor.ide.storage.Storage;
+import com.tooling4sensor.ide.storage.dao.StorageDAO;
+import com.tooling4sensor.ide.storage.types.StorageFactory;
+import com.tooling4sensor.ide.storage.types.StorageFile;
+import com.tooling4sensor.ide.storage.types.StorageType;
+import com.tooling4sensor.ide.user.Account;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
  *
@@ -9,5 +24,39 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class FileSaveController
 {
+    private ProjectDAO projectDAO;
+    private StorageDAO storageDAO;
+    private FileOpennedDAO fileDAO;
+    
+    @Autowired
+    public FileSaveController( ProjectDAO p , StorageDAO s , FileOpennedDAO f )
+    {
+        this.projectDAO = p;
+        this.storageDAO = s;
+        this.fileDAO = f;
+    }
+    
+    @RequestMapping( value = "/project/{id}/file/save" , method = RequestMethod.POST )
+    public void open( @PathVariable Long id , String file , String data , HttpServletRequest request , HttpServletResponse response ) throws Exception
+    {
+        if( file == null ? true : file.isEmpty() )
+        {
+            throw new Exception( "File is illegal, because it is null or empty." );
+        }
+        
+        // ---------------------------- Abrir o Arquivo
+        Account user = (Account) request.getSession().getAttribute( "user" );
+        Project project = projectDAO.get( id , user.getUserId() );
+        Storage storage = storageDAO.get( project.getStorageId() , user.getUserId() );
+        
+        StorageType type = StorageFactory.getInstance().get( storage.getType() );
+        type.connect( storage );
+        
+        StorageFile sf = type.open( file );
+        sf.setData( data );
+        
+        // ---------------------------- retorna para o usuário que deu tudo certo
+        response.setStatus( HttpServletResponse.SC_OK );
+    }
     
 }

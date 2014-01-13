@@ -7,39 +7,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="IDEA4WSN" />
     <meta name="author" content="UFPE - Centro de Informatica (CIn)" />
     <link rel="shortcut icon" href="favicon.png" />
     
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+    <link href="/IDEA4WSN/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/IDEA4WSN/css/jquery.splitter.css" rel="stylesheet" />
+    <link href="/IDEA4WSN/css/app.tree.css" rel="stylesheet" />
+    <link href="/IDEA4WSN/css/tabdrop.css" rel="stylesheet" />
+    
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="/IDEA4WSN/js/jquery.min.js"></script>
     <script src="/IDEA4WSN/js/jquery-migrate.min.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
     <script src="/IDEA4WSN/js/jquery.cookie.js"></script>
     <script src="/IDEA4WSN/js/jquery.hotkeys.js"></script>
     <script src="/IDEA4WSN/js/jquery.splitter.js"></script>
     <script src="/IDEA4WSN/js/jquery.jstree.js"></script>
+    <script src="/IDEA4WSN/js/notify.min.js"></script>
     
     <!-- Bootstrap -->
     <script src="/IDEA4WSN/js/bootstrap.min.js"></script>
-    <script src="/IDEA4WSN/js/bootstrap-dropdown.js"></script>
-    <script src="/IDEA4WSN/js/bootstrap-tab.js"></script>
-    <script src="/IDEA4WSN/js/bootstrap-tabdrop.js"></script>
+    <!-- script src="/IDEA4WSN/js/bootstrap-dropdown.js"></script -->
+    <!-- script src="/IDEA4WSN/js/bootstrap-tab.js"></script -->
+    <!-- script src="/IDEA4WSN/js/bootstrap-tabdrop.js"></script -->
     
     <!-- Application -->
+    <script src="/IDEA4WSN/js/app.notification.js"></script>
     <script src="/IDEA4WSN/js/app.project.js"></script>
     <script src="/IDEA4WSN/js/app.tab.js"></script>
     <script src="/IDEA4WSN/js/type/project.type.js"></script>
     <script src="/IDEA4WSN/js/type/directory.type.js"></script>
     <script src="/IDEA4WSN/js/app.jstree.js"></script>
-    
-    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
-    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-    
-    <link href="/IDEA4WSN/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="/IDEA4WSN/css/jquery.splitter.css" rel="stylesheet" />
-    <link href="/IDEA4WSN/css/app.tree.css" rel="stylesheet" />
-    <link href="/IDEA4WSN/css/tabdrop.css" rel="stylesheet" />
     
     <script>
         jQuery( function( $ )
@@ -184,5 +184,13 @@
     <c:import url="${body}.jsp" />
     
     <div id="dialog"></div>
+    
+    <div id="dialog-tabClose" title="Confirm">
+        <p>
+            <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
+            Do you want save and/or close this tab?
+        </p>
+    </div>
+    
   </body>
 </html>

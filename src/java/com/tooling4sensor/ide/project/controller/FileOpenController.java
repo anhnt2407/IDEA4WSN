@@ -18,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
  *
@@ -38,7 +39,7 @@ public class FileOpenController
         this.fileDAO = f;
     }
     
-    @RequestMapping( value = "/project/{id}/file" )
+    @RequestMapping( value = "/project/{id}/file" , method = RequestMethod.GET )
     public String open( @PathVariable Long id , String file , HttpServletRequest request, Model model ) throws Exception
     {
         if( file == null ? true : file.isEmpty() )
@@ -67,21 +68,8 @@ public class FileOpenController
         String pathId = createDataId( file );
         
         model.addAttribute( "id" , "tab_" + pathId + "_data" );
+        model.addAttribute( "path" , sf.getPath() );
         return FileViewFactory.getInstance().process( sf , model );
-    }
-    
-    public static byte[] gerarHash(String frase, String algoritmo)
-    {
-        try
-        {
-            MessageDigest md = MessageDigest.getInstance(algoritmo);
-            md.update( frase.getBytes() );
-            return md.digest();
-        }
-        catch ( NoSuchAlgorithmException e )
-        {
-            return null;
-        }
     }
     
     private String createDataId( String path )

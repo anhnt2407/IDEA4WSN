@@ -6,13 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * Esta classe representa um arquivo no padrão StorageFile.
+ * 
  * @author avld
  */
 public class LocalStorageFile extends StorageFile
 {
-    private File file;
-    private String omit;
+    private File file;          //Arquivo no servidor
+    private String omit;        //Parte do caminho que deve ser omitido
     
     public LocalStorageFile( File file , String omit )
     {
@@ -26,6 +27,11 @@ public class LocalStorageFile extends StorageFile
         return file.getName();
     }
 
+    /**
+     * retorna o caminho do arquivo, ocultando o endereço real na máquina.
+     * 
+     * @return 
+     */
     @Override
     public String getPath()
     {
@@ -43,6 +49,16 @@ public class LocalStorageFile extends StorageFile
         }
     }
 
+    /**
+     * Retorna o caminho real da pasta ou arquivo.
+     * 
+     * @return 
+     */
+    public String getAbsolutePath()
+    {
+        return file.getAbsolutePath();
+    }
+    
     @Override
     public boolean isDirectory()
     {

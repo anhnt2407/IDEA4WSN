@@ -6,28 +6,47 @@ import com.tooling4sensor.ide.storage.types.StorageType;
 import com.tooling4sensor.ide.storage.types.StorageValidate;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 
 /**
- *
+ * Esta classe é responsável por conectar na Storage alvo.
+ * Nesse caso, por ser local, a conexão é identificar a pasta
+ * relacionada com o usuário.
+ * 
+ * Quando for tratar um arquivo (ex. salvar), Ele SEMPRE irá receber 
+ * parte do caminho (ex. /Blink/teste.txt). Para tratar o arquivo 
+ * corretamente, em todas as ações que lida com arquivo deve encontrar
+ * o caminho absoluto (ex. /usuario/1/Blink/teste.txt).
+ * 
  * @author avld
  */
 public class LocalStorageType implements StorageType
 {
-    public static String PATH = "/opt/idea4wsn/";
-    private Storage storage;
-    private File rootDir;
+    public static String PATH = "/opt/idea4wsn/";   //Diretório onde todos os arquivos estão.
+    private Storage storage;                        //Configuracao de acesso (i.e., id do usuario).
+    private File rootDir;                           //Diretorio do usuário
     
     public LocalStorageType()
     {
         // do nothing
     }
     
+    /**
+     * Identificação do Storage.
+     * 
+     * @return 
+     */
     @Override
     public long getId()
     {
         return 1;
     }
 
+    /**
+     * Nome do Storage.
+     * 
+     * @return 
+     */
     @Override
     public String getName()
     {
@@ -68,7 +87,16 @@ public class LocalStorageType implements StorageType
     }
 
     // -----------------------------
+    // -----------------------------
+    // -----------------------------
     
+    /**
+     * Abre uma determina pasta ou arquivo nesse Storage.
+     * 
+     * @param path
+     * @return
+     * @throws Exception 
+     */
     @Override
     public StorageFile open( String path ) throws Exception
     {
@@ -85,6 +113,13 @@ public class LocalStorageType implements StorageType
         return sf;
     }
 
+    /**
+     * Renomea uma pasta ou arquivo nesse Storage.
+     * 
+     * @param path
+     * @param newName
+     * @throws Exception 
+     */
     @Override
     public void rename( String path , String newName ) throws Exception
     {
@@ -94,6 +129,13 @@ public class LocalStorageType implements StorageType
         f = null;
     }
 
+    /**
+     * Deleta uma pasta ou arquivo nesse Storage.
+     * 
+     * @param path
+     * @param newName
+     * @throws Exception 
+     */
     @Override
     public void delete( String path ) throws Exception
     {
@@ -115,6 +157,13 @@ public class LocalStorageType implements StorageType
         }
     }
     
+    /**
+     * Move uma pasta ou arquivo nesse Storage.
+     * 
+     * @param pathOriginal      caminho original
+     * @param pathNew           caminho para ser mudado
+     * @throws Exception 
+     */
     @Override
     public void move( String pathOriginal , String pathNew ) throws Exception
     {
@@ -141,7 +190,7 @@ public class LocalStorageType implements StorageType
     }
 
     @Override
-    public byte[] getFile( String path ) throws Exception
+    public byte[] getData( String path ) throws Exception
     {
         File f = file( path );
         
@@ -162,6 +211,16 @@ public class LocalStorageType implements StorageType
         return data;
     }
 
+    @Override
+    public void setData( String path , String data ) throws Exception
+    {
+        FileWriter writer = new FileWriter( file( path ) );
+        writer.write( data );
+        writer.close();
+        
+        writer = null;
+    }
+    
     private void deleteFile( File f ) throws Exception
     {
         f.delete();
@@ -195,6 +254,14 @@ public class LocalStorageType implements StorageType
     
     // ----------------------------
     
+    /**
+     * Recebe um caminho 'imaginário' (ex. /Blink/teste.txt) e retorna um arquivo
+     * com o caminho absoluto (ex. /usuario/1/Blink/teste.txt).
+     * 
+     * @param path
+     * @return
+     * @throws Exception 
+     */
     private File file( String path ) throws Exception
     {
         StorageValidate.path( path );
@@ -210,5 +277,5 @@ public class LocalStorageType implements StorageType
         
         return new File( f );
     }
-    
+
 }

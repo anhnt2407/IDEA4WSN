@@ -3,7 +3,8 @@ package com.tooling4sensor.ide.storage.types;
 import com.tooling4sensor.ide.storage.Storage;
 
 /**
- *
+ * Esta interface represeenta todas as ações possiveis em um Storage
+ * 
  * @author avld
  */
 public interface StorageType
@@ -21,7 +22,8 @@ public interface StorageType
     
     // -------------------- File
     public void createFile( String path ) throws Exception;
-    public byte[] getFile( String path ) throws Exception;
+    public byte[] getData( String path ) throws Exception;
+    public void setData( String path , String data ) throws Exception;
     
     // -------------------- Diretory
     public void createDir( String path ) throws Exception;

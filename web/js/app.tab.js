@@ -4,12 +4,14 @@
  * 
  **/
 
-var currentTab;
-var composeCounter = 0;
+var $currentTab;
+var $tabToRemove;
 
-//initilize tabs
+// ---------------------------------------------------
+// --------------------------------------------------- INICIALIZACAO
+// ---------------------------------------------------
+
 $(function () {
-
     //when ever any tab is clicked this method will be call
     $("#myTab").on("click", "a", function (e) {
         e.preventDefault();
@@ -18,6 +20,27 @@ $(function () {
         $currentTab = $(this);
     });
 
+    //configurar o DIALOG quando fechar uma aba
+    $( "#dialog-tabClose" ).dialog({
+        autoOpen : false,
+        resizable: false,
+        height   : 200  ,
+        modal    : true ,
+        
+        buttons: {
+            "Save": function() {
+                removeTab( $tabToRemove , true );
+                $( this ).dialog( "close" );
+            } ,
+            "Close": function() {
+                removeTab( $tabToRemove , false );
+                $( this ).dialog( "close" );
+            },
+            Cancel: function() {
+                $( this ).dialog( "close" );
+            }
+        }
+    });
 
     registerComposeButtonEvent();
     registerCloseEvent();
@@ -27,20 +50,28 @@ $(function () {
 function registerComposeButtonEvent()
 {
     /* just for this demo */
-    $('#composeButton').click( function ( e ) 
+    $( '#composeButton' ).click( function ( e ) 
             { 
                 e.preventDefault(); 
                 openFile( 'teste.txt' , '/Blink/teste.txt' );
             } );
 }
 
+//this method will register event on close icon on the tab..
+function registerCloseEvent()
+{
+    $( ".closeTab" ).click(function (){
+        $tabToRemove = $(this).parent();             //close the tab whose close icon is clicked
+        $( "#dialog-tabClose" ).dialog( "open" );
+    });
+}
+
 // ---------------------------------------------------
-// --------------------------------------------------- FUNCTIONS WITH FILE
+// --------------------------------------------------- FUNCTIONS RELACIONADAS COM ABRIR UM ARQUIVO
 // ---------------------------------------------------
 
 function openFile( name , path )
 {
-    //composeCounter
     var tabId = "tab_" + changePathToId( path ); //this is id on tab content div where the 
     
     var tabTitle = '<li>';
@@ -65,9 +96,24 @@ function openFile( name , path )
     registerCloseEvent();
 };
 
-function saveFile()
+function saveFile( path , conteudo )
 {
+    var urlPath = document.URL;                             // URL do projeto
+    var hashIndex = document.URL.indexOf( '#' );            // Remove caso haja uma #tag
+
+    if( hashIndex !== -1 )
+    {
+        urlPath = document.URL.substr( 0 , hashIndex );
+    }
     
+    // Enviar o conteudo e o caminho do arquivo para o servidor
+    $.post( urlPath + "/file/save" , { file: path , data: conteudo } )
+      .done( function() {       //Caso seja enviado com sucesso!
+        notification( "The file was saved." , "success" );
+      })
+      .fail(function() {        //Caso tenha alguma falha no processo!
+        notification( "The file was not saved." , "error" );
+      });
 }
 
 // ---------------------------------------------------
@@ -109,22 +155,6 @@ function isDigit( str )
   return str.length === 1 && str.match(/[0-9]/i);
 }
 
-//this method will register event on close icon on the tab..
-function registerCloseEvent()
-{
-    $(".closeTab").click(function () {
-        //there are multiple elements which has .closeTab icon so close the tab whose close icon is clicked
-        var tabContentId = $(this).parent().attr("href");
-        $(this).parent().parent().remove(); //remove li of tab
-        $('#myTab a:last').tab('show'); // Select first tab
-        
-        var tabConteudo = $( tabContentId + "_data" )[0].innerHTML;
-        //TODO: salvar no servidor!
-        
-        $( tabContentId ).remove();         //remove respective tab content
-    });
-}
-
 //shows the tab with passed content div id..paramter tabid indicates the div 
 //where the content resides
 function showTab( tabId )
@@ -160,17 +190,38 @@ function getElement( selector )
 
 }
 
-
+/**
+ * Remove a aba atual aberta!
+ * 
+ */
 function removeCurrentTab()
 {
-    var tabContentId = $currentTab.attr( "href" );
+    $tabToRemove = $currentTab;
+    $( "#dialog-tabClose" ).dialog( "open" );
+}
+
+/**
+ * Remove a aba TAB e Salva o arquivo
+ * 
+ * @param {node} tab
+ * @param {boolean} isSaveFile
+ */
+function removeTab( tab , isSaveFile )
+{
+    var tabContentId = tab.attr( "href" );
     
-    $currentTab.parent().remove();      //remove li of tab
+    //Primeiro, salva o arquivo
+    if( isSaveFile )
+    {
+        var tabData     = $( tabContentId + "_data" )[0];
+        var tabConteudo = tabData.innerHTML;                    // Conteudo do arquivo
+        var tabFile     = $( tabData ).attr( "file" );          // Caminho imaginario do arquivo
+        
+        saveFile( tabFile , tabConteudo );
+    }
+    
+    //Depois, remove a aba
+    tab.parent().remove();              // Remove li of tab
     $('#myTab a:last').tab( 'show' );   // Select first tab
-    
-    var tabContentData = $( tabContentId );
-    
-    alert( "OK!" );
-    $( "#home" ).append( print( tabContentData ) );
-    tabContentData.remove();         //remove respective tab content
+    $( tabContentId ).remove();         // Remove respective tab content
 }

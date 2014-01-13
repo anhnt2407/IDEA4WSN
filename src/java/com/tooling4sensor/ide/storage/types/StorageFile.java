@@ -29,7 +29,19 @@ public abstract class StorageFile
     {
         if( isFile() )
         {
-            return type.getFile( getPath() );
+            return type.getData( getPath() );
+        }
+        else
+        {
+            throw new Exception( "It is a directory." );
+        }
+    }
+    
+    public void setData( String data ) throws Exception
+    {
+        if( isFile() )
+        {
+            type.setData( getPath() , data );
         }
         else
         {
