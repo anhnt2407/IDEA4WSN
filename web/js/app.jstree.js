@@ -71,7 +71,7 @@ function notAcceptDuplicateNode( n , p , f )
  */
 function openProject( project_id )
 {
-    current_project = project_id;
+    current_project = project_id;    
     
     $( "#jstree_project" ).jstree({
         "core"   : { "initially_open" : [ "root" ] } ,
@@ -118,10 +118,59 @@ function initJsTree()
  * *******************************************************************
  *********************************************************************/
 
+function endsWith( str , suffix )
+{
+    return str.indexOf(suffix, str.length - suffix.length) !== -1;
+}
+
+function print( o )
+{
+    var str='';
+
+    for( var p in o )
+    {
+        if( typeof o[p] === 'function' )
+        {
+            // do nothing
+        }
+        else if( typeof o[p] === 'string' )
+        {
+            str += p + ': ' + o[p]+'; </br>';
+        }
+        else
+        {
+            str += p + ': { </br>';
+            
+            for( var p2 in o[p] )
+            {
+                str += "  " + p2 + ': ' + o[p][p2]+'; </br>';
+            }
+            
+            str += '}';
+        }
+    }
+
+    return str;
+}
+
 // When the project is initilize
 $( function ()
 {
     initJsTree();
+    
+    $( "#jstree_project" ).delegate( "a" , "dblclick" , function( event ) {
+        event.preventDefault(); 
+        
+        var name = event.target.text;
+        var path = event.target.pathname;
+        var base = event.target.baseURI;
+        var isDir = endsWith( base , path );
+        
+        if( !isDir )
+        {
+            openFile( name , path );
+        }
+     });
     
 //    $('#buttonOpenProject').click( function (e) {
 //        openProject( "/home/avld/Aulas" );

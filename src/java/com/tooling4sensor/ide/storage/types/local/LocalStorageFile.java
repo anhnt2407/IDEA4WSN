@@ -12,10 +12,12 @@ import java.util.List;
 public class LocalStorageFile extends StorageFile
 {
     private File file;
+    private String omit;
     
-    public LocalStorageFile( File file )
+    public LocalStorageFile( File file , String omit )
     {
         this.file = file;
+        this.omit = omit;
     }
     
     @Override
@@ -27,7 +29,18 @@ public class LocalStorageFile extends StorageFile
     @Override
     public String getPath()
     {
-        return file.getAbsolutePath();
+        String path = file.getAbsolutePath();
+        
+        if( omit == null 
+                ? false 
+                : path.startsWith( omit ) )
+        {
+            return path.substring( omit.length() );
+        }
+        else
+        {
+            return path;
+        }
     }
 
     @Override
@@ -55,7 +68,7 @@ public class LocalStorageFile extends StorageFile
         List<StorageFile> l = new ArrayList<>();
         for( File f : file.listFiles() )
         {
-            StorageFile sf = new LocalStorageFile( f );
+            StorageFile sf = new LocalStorageFile( f , omit );
             sf.setStorageType( getStorageType() );
             
             l.add( sf );

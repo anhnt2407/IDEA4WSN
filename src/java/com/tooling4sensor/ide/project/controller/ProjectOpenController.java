@@ -126,8 +126,13 @@ public class ProjectOpenController
         String liClass = file.isDirectory() ? "jstree-closed" : "jstree-leaf";
         liClass       += last ? " jstree-last" : "";
         
-        String li   = "<li id='"+ liId +"' rel='"+ type +"'>";
-        String name = "<a href='#'>" + file.getName() + "</a>";
+        String li   = "<li id='${id}' rel='${type}'>";
+        li = li.replace( "${id}"   , liId );
+        li = li.replace( "${type}" , type );
+        
+        String name = "<a href='${href}'>${name}</a>";
+        name = name.replace( "${href}" , file.isDirectory() ? "#" : file.getPath() );
+        name = name.replace( "${name}" , file.getName() );
         
         builder.append( li   );
         builder.append( name );

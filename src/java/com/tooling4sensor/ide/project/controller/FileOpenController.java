@@ -64,7 +64,9 @@ public class FileOpenController
         // ---------------------------- TODO: Salvar no banco que o arquivo esta aberto
         
         // ---------------------------- Mostrar para o usuario o dado do arquivo
-        model.addAttribute( "id" , gerarHash( sf.getName() , "MD5" ) );
+        String pathId = createDataId( file );
+        
+        model.addAttribute( "id" , "tab_" + pathId + "_data" );
         return FileViewFactory.getInstance().process( sf , model );
     }
     
@@ -82,4 +84,26 @@ public class FileOpenController
         }
     }
     
+    private String createDataId( String path )
+    {
+        String id = "";
+        
+        for( Character c : path.toCharArray() )
+        {
+            if( c == '/' )
+            {
+                id += "dDd";
+            }
+            else if( c == '.' )
+            {
+                id += "eEe";
+            }
+            else if( Character.isLetterOrDigit( c ) )
+            {
+                id += c;
+            }
+        }
+        
+        return id;
+    }
 }

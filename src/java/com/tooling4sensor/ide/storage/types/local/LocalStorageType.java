@@ -79,7 +79,7 @@ public class LocalStorageType implements StorageType
             throw new Exception( "This file/directory doesn't exist." );
         }
         
-        StorageFile sf = new LocalStorageFile( f );
+        StorageFile sf = new LocalStorageFile( f , rootDir.getPath() );
         sf.setStorageType( this );
         
         return sf;
