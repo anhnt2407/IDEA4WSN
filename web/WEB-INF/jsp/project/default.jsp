@@ -11,16 +11,16 @@
     <meta name="author" content="UFPE - Centro de Informatica (CIn)" />
     <link rel="shortcut icon" href="favicon.png" />
     
-    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+    <link href="/IDEA4WSN/css/jquery-ui.css" rel="stylesheet">
     <link href="/IDEA4WSN/css/bootstrap.min.css" rel="stylesheet" />
     <link href="/IDEA4WSN/css/jquery.splitter.css" rel="stylesheet" />
-    <link href="/IDEA4WSN/css/app.tree.css" rel="stylesheet" />
-    <link href="/IDEA4WSN/css/tabdrop.css" rel="stylesheet" />
+    <link href="/IDEA4WSN/js/themes/default/style.min.css" rel="stylesheet" />
+    <!-- <link href="/IDEA4WSN/css/tabdrop.css" rel="stylesheet" /> -->
     
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="/IDEA4WSN/js/jquery.min.js"></script>
     <script src="/IDEA4WSN/js/jquery-migrate.min.js"></script>
-    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <script src="/IDEA4WSN/js/jquery-ui.js"></script>
     <script src="/IDEA4WSN/js/jquery.cookie.js"></script>
     <script src="/IDEA4WSN/js/jquery.hotkeys.js"></script>
     <script src="/IDEA4WSN/js/jquery.splitter.js"></script>
@@ -34,6 +34,7 @@
     <!-- script src="/IDEA4WSN/js/bootstrap-tabdrop.js"></script -->
     
     <!-- Application -->
+    <script src="/IDEA4WSN/js/app.util.js"></script>
     <script src="/IDEA4WSN/js/app.notification.js"></script>
     <script src="/IDEA4WSN/js/app.project.js"></script>
     <script src="/IDEA4WSN/js/app.tab.js"></script>
@@ -49,7 +50,7 @@
            .height( $( '#main' ).height() )
            .split( { orientation:'vertical' , limit:100 , position:'20%' } );
 
-           $( '.nav-pills, .nav-tabs' ).tabdrop();
+           //$( '.nav-pills, .nav-tabs' ).tabdrop();
            
            $("#dialog").dialog(
             {

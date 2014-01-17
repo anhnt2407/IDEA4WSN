@@ -1,6 +1,6 @@
 package com.tooling4sensor.ide.storage.types.local;
 
-import com.tooling4sensor.ide.storage.Storage;
+import com.tooling4sensor.ide.storage.StorageAccount;
 import com.tooling4sensor.ide.storage.types.StorageFile;
 import com.tooling4sensor.ide.storage.types.StorageType;
 import com.tooling4sensor.ide.storage.types.StorageValidate;
@@ -23,7 +23,7 @@ import java.io.FileWriter;
 public class LocalStorageType implements StorageType
 {
     public static String PATH = "/opt/idea4wsn/";   //Diretório onde todos os arquivos estão.
-    private Storage storage;                        //Configuracao de acesso (i.e., id do usuario).
+    private StorageAccount storage;                        //Configuracao de acesso (i.e., id do usuario).
     private File rootDir;                           //Diretorio do usuário
     
     public LocalStorageType()
@@ -54,7 +54,7 @@ public class LocalStorageType implements StorageType
     }
 
     @Override
-    public void connect( Storage storage ) throws Exception
+    public void connect( StorageAccount storage ) throws Exception
     {
         if( storage == null )
         {

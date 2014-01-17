@@ -1,4 +1,4 @@
-<div id="${id}" file="${path}">${data}</div>
+<div id="${id}" file="${path}" storage="${storage}">${data}</div>
 
 <script>
     var editor = ace.edit( "${id}" );

@@ -14,7 +14,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table( name="Storage" , schema="idea4wsn" )
-public class Storage implements Serializable
+public class StorageAccount implements Serializable
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +26,7 @@ public class Storage implements Serializable
     private String password;
     private String information;
     
-    public Storage()
+    public StorageAccount()
     {
         // do nothing
     }

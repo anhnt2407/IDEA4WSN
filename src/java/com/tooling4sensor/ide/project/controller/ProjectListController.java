@@ -2,7 +2,7 @@ package com.tooling4sensor.ide.project.controller;
 
 import com.tooling4sensor.ide.project.Project;
 import com.tooling4sensor.ide.project.dao.ProjectDAO;
-import com.tooling4sensor.ide.storage.Storage;
+import com.tooling4sensor.ide.storage.StorageAccount;
 import com.tooling4sensor.ide.storage.dao.StorageDAO;
 import com.tooling4sensor.ide.user.Account;
 import java.util.HashMap;
@@ -36,10 +36,10 @@ public class ProjectListController
     {
         Account user = (Account) request.getSession().getAttribute( "user" );
         List<Project> projectList = projectDao.list( user.getUserId() );
-        List<Storage> storageList = storageDao.list( user.getUserId() );
+        List<StorageAccount> storageList = storageDao.list( user.getUserId() );
         
-        Map<Long,Storage> map = new HashMap<>();
-        for( Storage s : storageList )
+        Map<Long,StorageAccount> map = new HashMap<>();
+        for( StorageAccount s : storageList )
         {
             map.put( s.getStorageId() , s );
         }

@@ -1,6 +1,6 @@
 package com.tooling4sensor.ide.storage.types;
 
-import com.tooling4sensor.ide.storage.Storage;
+import com.tooling4sensor.ide.storage.StorageAccount;
 
 /**
  * Esta interface represeenta todas as ações possiveis em um Storage
@@ -12,7 +12,7 @@ public interface StorageType
     // -------------------- Geral
     public long getId();
     public String getName();
-    public void connect( Storage storage ) throws Exception;
+    public void connect( StorageAccount storage ) throws Exception;
     public void desconnect() throws Exception;
     
     public StorageFile open( String path ) throws Exception;

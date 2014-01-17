@@ -81,15 +81,8 @@ function openFile( name , path )
     $('.nav-tabs').append( tabTitle );
     $('.tab-content').append('<div class="tab-pane" id="' + tabId + '"></div>');
 
-    var urlPath = document.URL;
-    var hashIndex = document.URL.indexOf( '#' );
-    
-    if( hashIndex !== -1 )
-    {
-        urlPath = document.URL.substr( 0 , hashIndex );
-    }
-
-    craeteNewTabAndLoadUrl( "" , urlPath + "/file?file=" + path , "#" + tabId );
+    var urlPath = "/IDEA4WSN/storage/" + $project_storage + "/file?file=";
+    craeteNewTabAndLoadUrl( "" , urlPath + path , "#" + tabId );
 
     $(this).tab( 'show' );
     showTab( tabId );
@@ -143,16 +136,6 @@ function changePathToId( path )
     }
     
     return id.replace( "." , "eEe" );
-}
-
-function isLetter( str )
-{
-  return str.length === 1 && (str.match(/[a-z]/i) || str.match(/[A-Z]/i));
-}
-
-function isDigit( str )
-{
-  return str.length === 1 && str.match(/[0-9]/i);
 }
 
 //shows the tab with passed content div id..paramter tabid indicates the div 

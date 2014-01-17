@@ -39,7 +39,159 @@ function addTreeType( name , value )
  * *******************************************************************
  *********************************************************************/
 
+function tree_file_open( event )
+{
+    event.preventDefault();
 
+    var name = event.target.text;
+    var path = event.target.pathname;
+    var parent = $( event.target ).parent();
+    
+    // Nao permitir que pastas sejam abertas nas abas
+    if( !tree_isDirectory( parent ) )
+    {
+        openFile( name , path );
+    }
+}
+
+function tree_file_rename( event , data )
+{
+    event.preventDefault();
+
+    var old  = data.rslt.old_name;
+    var name = data.rslt.new_name;
+    var path = $( data.rslt.obj ).children( 'a' ).attr( 'href' );
+    
+    // Não pode permitir que a pasta ROOT seja alterada
+    if( data.rslt.obj.attr( 'id' ) === 'root' )
+    {
+        $.jstree.rollback( data.rlbk );
+        notification( "You can not rename the root folder!" , "error" );
+        return ;
+    }
+    
+    // Atualizar no servidor o nome do arquivo
+    $.ajax
+    ( {
+        async: false ,
+        type : 'POST' ,
+        url  : "/IDEA4WSN/storage/" + $project_storage + "/file/rename" ,
+        data : { "path" : path , "name" : name } ,
+        success : postResult
+    } );
+    
+    // Atualizar o HREF para o novo caminho do arquivo ou pasta
+    var pathNew = path.substr( 0 , path.length - old.length ) + name;
+    $( data.rslt.obj ).children( 'a' ).attr( 'href' , pathNew );
+    
+    // se for uma pasta, é necessário atualizar os seus filhos
+    if( tree_isDirectory( data.rslt.obj ) )
+    {
+        _tree_rename_children( path , pathNew , data.rslt.obj );
+    }
+    
+    notification( "File/Directory renamed!" , "success" );
+    
+    //TODO: quando uma aba esta aberta do arquivo?
+}
+
+function _tree_rename_children( path , pathNew , element )
+{
+    var $children = element.children( 'ul' ).children( 'li' );
+    alert( "Lenght: " + $children.length );
+
+    $.each( $children , function ( index , value )
+    {
+        var $value = $( value );
+        var a = $value.children( 'a' );
+        var a_href = a.attr( 'href' );
+        
+        if( startsWith( a_href , path ) )
+        {
+            var a_href_new = pathNew + a_href.substr( path.length , a_href.length - path.length );
+            a.attr( 'href' , a_href_new );
+        }
+        
+        if( tree_isDirectory( $value ) )
+        {
+            _tree_rename_children( path , pathNew , value );
+        }
+    });
+}
+
+//////////////////////////////////////////////////////////////
+
+function tree_file_remove( event , data )
+{
+    event.preventDefault();
+
+    // Confirmar se deseja mesmo deletar o arquivo
+    var option = confirm( "Do you want remove this file/directory?" );
+    if( option === false )
+    {
+        $.jstree.rollback( data.rlbk );
+        notification( "User cancelled the action!" , "error" );
+        return ;
+    }
+
+    var path = $( data.rslt.obj ).children( 'a' ).attr( 'href' );
+    var isDir = tree_isDirectory( data.rslt.obj );
+    
+    // Não pode permitir que a pasta ROOT seja alterada
+    if( data.rslt.obj.attr( 'id' ) === 'root' )
+    {
+        $.jstree.rollback( data.rlbk );
+        notification( "You can not remove the root folder!" , "error" );
+        return ;
+    }
+    
+    // Atualizar no servidor o nome do arquivo
+    $.ajax
+    ( {
+        async: false ,
+        type : 'POST' ,
+        url  : "/IDEA4WSN/storage/" + $project_storage + "/file/remove" ,
+        data : { "path" : path , "directory" : isDir } ,
+        success : postResult
+    } );
+    
+    notification( "File/Directory removed!" , "success" );
+}
+
+//////////////////////////////////////////////////////////////
+
+function tree_file_move( node , newPath )
+{
+    
+}
+
+function tree_file_new( event , data )
+{
+    //$( "#demo" ).jstree( "create" , null , "last" , { "attr" : { "rel" : "default" } });
+    //$( "#demo" ).jstree( "create" , null , "last" , { "attr" : { "rel" : "folder" } });
+    
+    event.preventDefault();
+    
+    var name   = data.rslt.name;
+    var parent = $( data.rslt.obj ).parent().parent();
+    var path   = parent.children( 'a' ).attr( 'href' );
+    path = path + "/" + name;
+    
+    // Criar o arquivo no servidor
+    $.ajax
+    ( {
+        async: false ,
+        type : 'POST' ,
+        url  : "/IDEA4WSN/storage/" + $project_storage + "/file/new" ,
+        data : { "path" : path , "data" : "" , "dir" : false } ,
+        success : postResult
+    } );
+    
+    $( data.rslt.obj ).children( 'a' ).attr( 'href' , path );
+    
+    openFile( name , path );
+    notification( "File created!" , "success" );
+}
 
 /*********************************************************************
  * *******************************************************************
@@ -48,8 +200,6 @@ function addTreeType( name , value )
  * 
  * *******************************************************************
  *********************************************************************/
-
-var current_project = "";
 
 /**
  * Mostra para o usuário que ele tentou duplicar um node no JS Tree
@@ -63,15 +213,29 @@ function notAcceptDuplicateNode( n , p , f )
     alert( "Duplicate node `" + n + "`!" );
 }
 
+function postResult( r )
+{
+    if( !r.status )
+    {
+        $.jstree.rollback( data.rlbk );
+    }
+}
+
+function tree_isDirectory( element )
+{
+    return element.attr( 'rel' ) === 'directory';
+}
+
 /**
  * Abre um projeto no JS Tree
  * 
  * @param {String} project_id
  * @returns
+ * @deprecated NAO É USADO!
  */
-function openProject( project_id )
+function tree_project_open( project_id )
 {
-    current_project = project_id;    
+    $project_current = project_id;    // app.project.js
     
     $( "#jstree_project" ).jstree({
         "core"   : { "initially_open" : [ "root" ] } ,
@@ -95,21 +259,6 @@ function openProject( project_id )
     setTimeout(function () { $("#jstree_project").jstree("set_focus"); } , 500 );
 }
 
-function initJsTree()
-{
-    $( "#jstree_project" ).jstree({
-        "core"   : { "initially_open" : [ "root" ] } ,
-        "themes" : { "theme" : "apple", "dots" : true, "icons" : true  } ,
-        "unique" : { "error_callback" : notAcceptDuplicateNode } ,
-        "types"  : js_tree_types ,
-        
-        // the `plugins` array allows you to configure the active plugins on this instance
-        "plugins" : [ "themes" , "html_data", "ui" , "crrm" , "hotkeys" , "contextmenu" , "unique" ]
-    });
-}
-
-
-
 /*********************************************************************
  * *******************************************************************
  * 
@@ -118,68 +267,33 @@ function initJsTree()
  * *******************************************************************
  *********************************************************************/
 
-function endsWith( str , suffix )
-{
-    return str.indexOf(suffix, str.length - suffix.length) !== -1;
-}
-
-function print( o )
-{
-    var str='';
-
-    for( var p in o )
-    {
-        if( typeof o[p] === 'function' )
-        {
-            // do nothing
-        }
-        else if( typeof o[p] === 'string' )
-        {
-            str += p + ': ' + o[p]+'; </br>';
-        }
-        else
-        {
-            str += p + ': { </br>';
-            
-            for( var p2 in o[p] )
-            {
-                str += "  " + p2 + ': ' + o[p][p2]+'; </br>';
-            }
-            
-            str += '}';
-        }
-    }
-
-    return str;
-}
-
 // When the project is initilize
 $( function ()
 {
-    initJsTree();
+    var jsTreeProject = $( "#jstree_project" );
     
-    $( "#jstree_project" ).delegate( "a" , "dblclick" , function( event ) {
-        event.preventDefault(); 
+    if( jsTreeProject.length === 0 )
+    {
+        return ;
+    }
+    
+    jsTreeProject.jstree({
+        "core"   : { "initially_open" : [ "root" ] } ,
+        "themes" : { "theme" : "apple", "dots" : true, "icons" : true  } ,
+        "unique" : { "error_callback" : notAcceptDuplicateNode } ,
+        //"types"  : js_tree_types ,
+        //"contextmenu" : tree_context_menu ,
         
-        var name = event.target.text;
-        var path = event.target.pathname;
-        var base = event.target.baseURI;
-        var isDir = endsWith( base , path );
-        
-        if( !isDir )
-        {
-            openFile( name , path );
-        }
-     });
+        // the `plugins` array allows you to configure the active plugins on this instance
+        "plugins" : [ "themes" , "html_data", "ui" , "crrm" , "hotkeys" , "contextmenu" , "unique" ]
+    });
     
-//    $('#buttonOpenProject').click( function (e) {
-//        openProject( "/home/avld/Aulas" );
-//    });
+    var rootNode = $( "#root" );
+    $project_current = rootNode.attr( "project" );  // encontrar o identificador do projeto
+    $project_storage = rootNode.attr( "storage" );  // encontrar o identificador do storage
     
-//    $('#buttonReloadProject').click( function (e) {
-//        if( current_project != null )
-//        {
-//            openProject( current_project );
-//        }
-//    });
+    jsTreeProject.delegate( "a" , "dblclick" , tree_file_open ); // abrir um arquivo
+    jsTreeProject.bind( "rename.jstree" , tree_file_rename );
+    jsTreeProject.bind( "remove.jstree" , tree_file_remove );
+    jsTreeProject.bind( "create.jstree" , tree_file_new );
 });

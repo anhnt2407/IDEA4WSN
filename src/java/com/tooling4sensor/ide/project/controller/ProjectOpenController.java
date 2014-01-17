@@ -2,7 +2,7 @@ package com.tooling4sensor.ide.project.controller;
 
 import com.tooling4sensor.ide.project.Project;
 import com.tooling4sensor.ide.project.dao.ProjectDAO;
-import com.tooling4sensor.ide.storage.Storage;
+import com.tooling4sensor.ide.storage.StorageAccount;
 import com.tooling4sensor.ide.storage.dao.StorageDAO;
 import com.tooling4sensor.ide.storage.types.StorageFactory;
 import com.tooling4sensor.ide.storage.types.StorageFile;
@@ -47,12 +47,12 @@ public class ProjectOpenController
             return "redirect:project/index";
         }
         
-        Storage storage = storageDao.get( project.getStorageId() , user.getUserId() );
+        StorageAccount storage = storageDao.get( project.getStorageId() , user.getUserId() );
         
         StorageType type = StorageFactory.getInstance().get( storage.getType() );
         type.connect( storage );
         
-        String xml = file2data( type.open( project.getDirectory() ) );
+        String xml = file2data( id , project.getStorageId() , type.open( project.getDirectory() ) );
         
         model.addAttribute( "username"      , user.getName() );
         model.addAttribute( "projectJsTree" , xml            );
@@ -79,12 +79,12 @@ public class ProjectOpenController
             return ;
         }
         
-        Storage storage = storageDao.get( project.getStorageId() , user.getUserId() );
+        StorageAccount storage = storageDao.get( project.getStorageId() , user.getUserId() );
         
         StorageType type = StorageFactory.getInstance().get( storage.getType() );
         type.connect( storage );
         
-        String xml = file2data( type.open( project.getDirectory() ) );
+        String xml = file2data( id , project.getStorageId() , type.open( project.getDirectory() ) );
 
         response.setContentType( "text/html" );
         response.getWriter().write( xml );
@@ -92,13 +92,15 @@ public class ProjectOpenController
     }
     
     //http://www.jstree.com/documentation/html_data
-    public String file2data( StorageFile file )
+    public String file2data( long projectId , long storageId , StorageFile file )
     {
-        String name = "<a href='#'>" + file.getName() + "</a> \n";
+        String name = "<a href='"+file.getPath()+"'>" + file.getName() + "</a> \n";
         
         StringBuilder builder = new StringBuilder();
         builder.append( "<ul>" );
-        builder.append( "<li id='root' rel='project'>" );
+        builder.append("<li id='root' rel='project' class='jstree-open'");
+        builder.append(" project='" ).append( projectId ).append( "'");
+        builder.append(" storage='" ).append( storageId ).append( "'>");
         builder.append( name );
         builder.append( "<ul>" );
         
@@ -131,7 +133,7 @@ public class ProjectOpenController
         li = li.replace( "${type}" , type );
         
         String name = "<a href='${href}'>${name}</a>";
-        name = name.replace( "${href}" , file.isDirectory() ? "#" : file.getPath() );
+        name = name.replace( "${href}" , file.getPath() );
         name = name.replace( "${name}" , file.getName() );
         
         builder.append( li   );

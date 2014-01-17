@@ -11,40 +11,37 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
  *
  * @author avld
  */
 @Controller
-public class FileSaveController
+public class FileRemoveController 
 {
     private StorageDAO storageDAO;
     
     @Autowired
-    public FileSaveController( StorageDAO s )
+    public FileRemoveController( StorageDAO s )
     {
         this.storageDAO = s;
     }
     
-    @RequestMapping( value = "/storage/{id}/file/save" , method = RequestMethod.POST )
-    public void open( @PathVariable Long id , String file , String data , HttpServletRequest request , HttpServletResponse response ) throws Exception
+    @RequestMapping( value = "/storage/{id}/file/remove" )
+    public void open( @PathVariable Long id , String path , HttpServletRequest request, HttpServletResponse response ) throws Exception
     {
-        if( file == null ? true : file.isEmpty() )
+        if( path == null ? true : path.isEmpty() )
         {
-            throw new Exception( "File is illegal, because it is null or empty." );
+            throw new Exception( "Path is illegal, because it is null or empty." );
         }
         
-        // ---------------------------- Abrir o Arquivo
         Account user = (Account) request.getSession().getAttribute( "user" );
         StorageAccount storage = storageDAO.get( id , user.getUserId() );
         
         StorageType type = StorageFactory.getInstance().get( storage.getType() );
         type.connect( storage );
-        type.setData( file , data );
+        type.delete( path );
         
-        // ---------------------------- retorna para o usuário que deu tudo certo
         response.setStatus( HttpServletResponse.SC_OK );
     }
     

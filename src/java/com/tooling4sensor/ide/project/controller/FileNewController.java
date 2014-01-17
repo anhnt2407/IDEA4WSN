@@ -18,20 +18,20 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * @author avld
  */
 @Controller
-public class FileSaveController
+public class FileNewController
 {
     private StorageDAO storageDAO;
     
     @Autowired
-    public FileSaveController( StorageDAO s )
+    public FileNewController( StorageDAO s )
     {
         this.storageDAO = s;
     }
     
-    @RequestMapping( value = "/storage/{id}/file/save" , method = RequestMethod.POST )
-    public void open( @PathVariable Long id , String file , String data , HttpServletRequest request , HttpServletResponse response ) throws Exception
+    @RequestMapping( value = "/storage/{id}/file/new" , method = RequestMethod.POST )
+    public void open( @PathVariable Long id , String path , String data , boolean dir , HttpServletRequest request , HttpServletResponse response ) throws Exception
     {
-        if( file == null ? true : file.isEmpty() )
+        if( path == null ? true : path.isEmpty() )
         {
             throw new Exception( "File is illegal, because it is null or empty." );
         }
@@ -42,7 +42,16 @@ public class FileSaveController
         
         StorageType type = StorageFactory.getInstance().get( storage.getType() );
         type.connect( storage );
-        type.setData( file , data );
+        
+        if( dir )
+        {
+            type.createDir( path );
+        }
+        else
+        {
+            type.createFile( path );
+            type.setData( path , data );
+        }
         
         // ---------------------------- retorna para o usuário que deu tudo certo
         response.setStatus( HttpServletResponse.SC_OK );

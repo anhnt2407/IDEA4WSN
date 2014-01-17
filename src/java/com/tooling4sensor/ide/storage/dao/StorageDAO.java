@@ -1,6 +1,6 @@
 package com.tooling4sensor.ide.storage.dao;
 
-import com.tooling4sensor.ide.storage.Storage;
+import com.tooling4sensor.ide.storage.StorageAccount;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -22,7 +22,7 @@ public class StorageDAO
         factory = Persistence.createEntityManagerFactory( "idea4wsn" );
     }
     
-    public long add( Storage storage )
+    public long add( StorageAccount storage )
     {
         EntityManager manager = factory.createEntityManager();
 
@@ -40,7 +40,7 @@ public class StorageDAO
         return storage.getUserId();
     }
     
-    public void modify( Storage storage )
+    public void modify( StorageAccount storage )
     {
         EntityManager manager = factory.createEntityManager();
 
@@ -58,7 +58,7 @@ public class StorageDAO
     
     public void delete( long storageId , long userId )
     {
-        Storage storage = get( storageId , userId ); // A Logica nao deveria esta aqui!
+        StorageAccount storage = get( storageId , userId ); // A Logica nao deveria esta aqui!
         
         if( storage == null )
         {
@@ -79,13 +79,13 @@ public class StorageDAO
         }
     }
     
-    public Storage get( long projectId , long userId )
+    public StorageAccount get( long storageId , long userId )
     {
         EntityManager manager = factory.createEntityManager();
 
         try
         {
-            Storage p = manager.find( Storage.class, projectId );
+            StorageAccount p = manager.find( StorageAccount.class, storageId );
             
             if( p.getUserId() != userId )
             {
@@ -100,7 +100,7 @@ public class StorageDAO
         }
     }
     
-    public List<Storage> list( long userId )
+    public List<StorageAccount> list( long userId )
     {
         EntityManager manager = factory.createEntityManager();
 
@@ -108,7 +108,7 @@ public class StorageDAO
         {
             String sql = "SELECT * FROM idea4wsn.Storage WHERE userid = " + userId;
             
-            Query query = manager.createNativeQuery( sql , Storage.class );
+            Query query = manager.createNativeQuery( sql , StorageAccount.class );
             return query.getResultList();
         }
         finally

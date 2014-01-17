@@ -2,7 +2,7 @@ package com.tooling4sensor.ide.project.controller;
 
 import com.tooling4sensor.ide.project.Project;
 import com.tooling4sensor.ide.project.dao.ProjectDAO;
-import com.tooling4sensor.ide.storage.Storage;
+import com.tooling4sensor.ide.storage.StorageAccount;
 import com.tooling4sensor.ide.storage.dao.StorageDAO;
 import com.tooling4sensor.ide.storage.types.StorageFactory;
 import com.tooling4sensor.ide.storage.types.StorageType;
@@ -61,7 +61,7 @@ public class ProjectCreateController
         project.setUserId( user.getUserId() );
         projectDao.add( project );
         
-        Storage storage = storageDao.get( project.getStorageId() , user.getUserId() );
+        StorageAccount storage = storageDao.get( project.getStorageId() , user.getUserId() );
         
         StorageType storageType = StorageFactory.getInstance().get( storage.getType() );
         storageType.connect( storage );
@@ -81,7 +81,7 @@ public class ProjectCreateController
         project.setUserId( user.getUserId() );
         long projectId = projectDao.add( project );
         
-        Storage storage = storageDao.get( project.getStorageId() , user.getUserId() );
+        StorageAccount storage = storageDao.get( project.getStorageId() , user.getUserId() );
         
         StorageType storageType = StorageFactory.getInstance().get( storage.getType() );
         storageType.connect( storage );
