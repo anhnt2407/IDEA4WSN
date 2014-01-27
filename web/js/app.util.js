@@ -70,7 +70,7 @@ function print( o )
             
             for( var p2 in o[p] )
             {
-                str += "  " + p2 + ': ' + o[p][p2]+'; <br />\n';
+                str += "            " + p2 + ': ' + o[p][p2]+'; <br />\n';
             }
             
             str += '}<br />\n';

@@ -39,6 +39,190 @@ function addTreeType( name , value )
  * *******************************************************************
  *********************************************************************/
 
+/**
+ * Esta função cria um menu de acordo com o elemento clicado.
+ * 
+ * @param {node} $node
+ * @returns {menu}
+ */
+function tree_context_menu( $node )
+{
+    // Cria o menu comum a todos os Nodes
+    var items =
+            {
+                "Open":
+                {
+                    "label": "Open" ,
+                    "_disabled" : false ,
+                    "action": function ( obj ) 
+                              {
+                                  var name = obj.context.text;
+                                  var path = obj.context.pathname;
+                                  
+                                  // Nao permitir que pastas sejam abertas nas abas
+                                  if( !tree_isDirectory( obj ) )
+                                  {
+                                     openFile( name , path );
+                                  }
+                              }
+                } ,
+                // -------------- Insert a separator before the item
+                "Cut":
+                {
+                    "label": "Cut" ,
+                    "separator_before"  : true ,
+                    "action": function ( obj ) 
+                              {
+                                  $copy_or_cut = 2;
+                                  this.cut( obj ); 
+                              }
+                } ,
+                "Copy":
+                {
+                    "label": "Copy",
+                    "action": function ( obj ) 
+                              { 
+                                  $copy_or_cut = 1;
+                                  this.copy( obj ); 
+                              }
+                } ,
+                "Paste":
+                {
+                    "label": "Paste",
+                    "action": function ( obj ) 
+                              {
+                                  this.paste( obj ); 
+                              }
+                } ,
+                "Duplicate":
+                {
+                    "label": "Duplicate" ,
+                    "action": function ( obj ) 
+                              {
+                                  projectFileDuplicate();
+                              }
+                } ,
+                // -------------- Insert a separator before the item
+                "Create":
+                {
+                    "label": "Create a file" ,
+                    "separator_before"  : true ,
+                    "action": function ( obj ) 
+                              { 
+                                  projectFileCreate( false ); 
+                              }
+                } ,
+                "Create_Dir":
+                {
+                    "label": "Create a Diretory",
+                    "action": function ( obj ) 
+                              { 
+                                  projectFileCreate( true ); 
+                              }
+                } ,
+                "Rename":
+                {
+                    "label": "Rename",
+                    "action": function ( obj ) 
+                              { 
+                                  projectFileRename(); 
+                              }
+                } ,
+                "Delete":
+                {
+                    "label": "Delete",
+                    "action": function ( obj ) 
+                              { 
+                                  projectFileDelete();
+                              }
+                } ,
+                // -------------- Insert a separator before the item
+                "Download":
+                {
+                    "label": "Donwload" ,
+                    "separator_before"  : true ,
+                    "action": function ( obj ) 
+                              { 
+                                  var $URL_DOWN = "/IDEA4WSN/storage/" + $project_storage + "/file/download";
+                                  $URL_DOWN = $URL_DOWN + "?path=" + obj.find( "a" ).attr( "href" );
+                                  
+                                  window.open( $URL_DOWN );
+                              }
+                } ,
+                "Upload":
+                {
+                    "label": "Upload" ,
+                    "action": function ( obj ) 
+                              {
+                                  var PROP_URL = "/IDEA4WSN/storage/" + $project_storage + "/file/upload";
+                                  PROP_URL = PROP_URL + "?path=" + obj.find( "a" ).attr( "href" );
+                                  
+                                  showDialogUrl( PROP_URL );
+                              }
+                } ,
+                // -------------- Insert a separator before the item
+                "Properties":
+                {
+                    "label": "Properties" ,
+                    "separator_before"  : true ,
+                    "action": function ( obj ) 
+                              {
+                                  var PROP_URL = "/IDEA4WSN/storage/" + $project_storage + "/file/properties";
+                                  PROP_URL = PROP_URL + "?path=" + obj.find( "a" ).attr( "href" );
+                                  
+                                  showDialogUrl( PROP_URL );
+                              }
+                }
+            };
+            
+    // ----------------------------------------------------------
+    // Remove/desabilita um elemento do Menu de acordo com o tipo 
+    // do Node.
+    // ----------------------------------------------------------
+    var node_jQuery = $( $node );
+    
+    if ( tree_isDirectory( node_jQuery ) )
+    {
+        items.Open._disabled = true;
+        
+        //TODO: futuramente o servidor ira copiar uma pasta!
+        items.Copy._disabled = true;
+        items.Duplicate._disabled = true;
+        
+        //TODO: futuramente o servidor ira fazer o download de uma pasta!
+        items.Download._disabled = true;
+    }
+    else if ( tree_isProject( node_jQuery ) )
+    {
+        items.Open._disabled = true;
+        items.Download._disabled = true;
+        
+        items.Cut._disabled  = true;
+        items.Copy._disabled = true;
+        items.Paste._disabled = ( $copy_or_cut === 0 );
+        items.Duplicate._disabled = true;
+        
+        items.Rename._disabled = true;
+        items.Delete._disabled = true;
+    }
+    else
+    {
+        items.Paste._disabled = ( $copy_or_cut === 0 );
+        
+        items.Create._disabled = true;
+        items.Create_Dir._disabled = true;
+        items.Upload._disabled = true;
+    }
+    
+    // --------------- Select the node
+    $( ".jstree-clicked" ).removeClass( "jstree-clicked" );
+    $( $node ).children( 'a' ).addClass( "jstree-clicked" );
+    
+    $node_selected = $( $node );
+    
+    return items;
+};
+
 function tree_file_open( event )
 {
     event.preventDefault();
@@ -54,110 +238,6 @@ function tree_file_open( event )
     }
 }
 
-function tree_file_rename( event , data )
-{
-    event.preventDefault();
-
-    var old  = data.rslt.old_name;
-    var name = data.rslt.new_name;
-    var path = $( data.rslt.obj ).children( 'a' ).attr( 'href' );
-    
-    // Não pode permitir que a pasta ROOT seja alterada
-    if( data.rslt.obj.attr( 'id' ) === 'root' )
-    {
-        $.jstree.rollback( data.rlbk );
-        notification( "You can not rename the root folder!" , "error" );
-        return ;
-    }
-    
-    // Atualizar no servidor o nome do arquivo
-    $.ajax
-    ( {
-        async: false ,
-        type : 'POST' ,
-        url  : "/IDEA4WSN/storage/" + $project_storage + "/file/rename" ,
-        data : { "path" : path , "name" : name } ,
-        success : postResult
-    } );
-    
-    // Atualizar o HREF para o novo caminho do arquivo ou pasta
-    var pathNew = path.substr( 0 , path.length - old.length ) + name;
-    $( data.rslt.obj ).children( 'a' ).attr( 'href' , pathNew );
-    
-    // se for uma pasta, é necessário atualizar os seus filhos
-    if( tree_isDirectory( data.rslt.obj ) )
-    {
-        _tree_rename_children( path , pathNew , data.rslt.obj );
-    }
-    
-    notification( "File/Directory renamed!" , "success" );
-    
-    //TODO: quando uma aba esta aberta do arquivo?
-}
-
-function _tree_rename_children( path , pathNew , element )
-{
-    var $children = element.children( 'ul' ).children( 'li' );
-    alert( "Lenght: " + $children.length );
-
-    $.each( $children , function ( index , value )
-    {
-        var $value = $( value );
-        var a = $value.children( 'a' );
-        var a_href = a.attr( 'href' );
-        
-        if( startsWith( a_href , path ) )
-        {
-            var a_href_new = pathNew + a_href.substr( path.length , a_href.length - path.length );
-            a.attr( 'href' , a_href_new );
-        }
-        
-        if( tree_isDirectory( $value ) )
-        {
-            _tree_rename_children( path , pathNew , value );
-        }
-    });
-}
-
-//////////////////////////////////////////////////////////////
-
-function tree_file_remove( event , data )
-{
-    event.preventDefault();
-
-    // Confirmar se deseja mesmo deletar o arquivo
-    var option = confirm( "Do you want remove this file/directory?" );
-    if( option === false )
-    {
-        $.jstree.rollback( data.rlbk );
-        notification( "User cancelled the action!" , "error" );
-        return ;
-    }
-
-    var path = $( data.rslt.obj ).children( 'a' ).attr( 'href' );
-    var isDir = tree_isDirectory( data.rslt.obj );
-    
-    // Não pode permitir que a pasta ROOT seja alterada
-    if( data.rslt.obj.attr( 'id' ) === 'root' )
-    {
-        $.jstree.rollback( data.rlbk );
-        notification( "You can not remove the root folder!" , "error" );
-        return ;
-    }
-    
-    // Atualizar no servidor o nome do arquivo
-    $.ajax
-    ( {
-        async: false ,
-        type : 'POST' ,
-        url  : "/IDEA4WSN/storage/" + $project_storage + "/file/remove" ,
-        data : { "path" : path , "directory" : isDir } ,
-        success : postResult
-    } );
-    
-    notification( "File/Directory removed!" , "success" );
-}
-
 //////////////////////////////////////////////////////////////
 
 function tree_file_move( node , newPath )
@@ -165,38 +245,10 @@ function tree_file_move( node , newPath )
     
 }
 
-function tree_file_new( event , data )
-{
-    //$( "#demo" ).jstree( "create" , null , "last" , { "attr" : { "rel" : "default" } });
-    //$( "#demo" ).jstree( "create" , null , "last" , { "attr" : { "rel" : "folder" } });
-    
-    event.preventDefault();
-    
-    var name   = data.rslt.name;
-    var parent = $( data.rslt.obj ).parent().parent();
-    var path   = parent.children( 'a' ).attr( 'href' );
-    path = path + "/" + name;
-    
-    // Criar o arquivo no servidor
-    $.ajax
-    ( {
-        async: false ,
-        type : 'POST' ,
-        url  : "/IDEA4WSN/storage/" + $project_storage + "/file/new" ,
-        data : { "path" : path , "data" : "" , "dir" : false } ,
-        success : postResult
-    } );
-    
-    $( data.rslt.obj ).children( 'a' ).attr( 'href' , path );
-    
-    openFile( name , path );
-    notification( "File created!" , "success" );
-}
-
 /*********************************************************************
  * *******************************************************************
  * 
- *                          APPLICATION
+ *                          COMMONS
  * 
  * *******************************************************************
  *********************************************************************/
@@ -213,17 +265,26 @@ function notAcceptDuplicateNode( n , p , f )
     alert( "Duplicate node `" + n + "`!" );
 }
 
-function postResult( r )
-{
-    if( !r.status )
-    {
-        $.jstree.rollback( data.rlbk );
-    }
-}
-
+/**
+ * Verifica se o elemento no JS Tree é um diretorio.
+ * 
+ * @param {Node} element
+ * @returns {Boolean}
+ */
 function tree_isDirectory( element )
 {
     return element.attr( 'rel' ) === 'directory';
+}
+
+/**
+ * Verifica se o elemento no JS Tree é um projeto.
+ * 
+ * @param {Node} element
+ * @returns {Boolean}
+ */
+function tree_isProject( element )
+{
+    return element.attr( 'rel' ) === 'project';
 }
 
 /**
@@ -259,6 +320,33 @@ function tree_project_open( project_id )
     setTimeout(function () { $("#jstree_project").jstree("set_focus"); } , 500 );
 }
 
+/**
+ * Irá orderar de A-Z os elementos na JSTree. Além disso, As pastas 
+ * ficarão em cima dos arquivos.
+ * 
+ * @param {node} a
+ * @param {node} b
+ * @returns {Number}
+ */
+function tree_sort( a , b )
+{
+    var jq_a = $( a );
+    var jq_b = $( b );
+    
+    if( tree_isDirectory( jq_a ) && !tree_isDirectory( jq_b ) )
+    {
+        return -1;
+    }
+    else if( !tree_isDirectory( jq_a ) && tree_isDirectory( jq_b ) )
+    {
+        return 1;
+    }
+    else
+    {
+        return this.get_text(a) > this.get_text(b) ? 1 : -1 ;
+    }
+}
+
 /*********************************************************************
  * *******************************************************************
  * 
@@ -266,6 +354,9 @@ function tree_project_open( project_id )
  * 
  * *******************************************************************
  *********************************************************************/
+
+$node_selected = null;
+$copy_or_cut = 0;      //NOTHING = 0 , COPY = 1 e CUT = 2
 
 // When the project is initilize
 $( function ()
@@ -282,18 +373,54 @@ $( function ()
         "themes" : { "theme" : "apple", "dots" : true, "icons" : true  } ,
         "unique" : { "error_callback" : notAcceptDuplicateNode } ,
         //"types"  : js_tree_types ,
-        //"contextmenu" : tree_context_menu ,
+        "contextmenu" : {items : tree_context_menu } ,
+        "sort"   : tree_sort ,
         
         // the `plugins` array allows you to configure the active plugins on this instance
-        "plugins" : [ "themes" , "html_data", "ui" , "crrm" , "hotkeys" , "contextmenu" , "unique" ]
+        "plugins" : [ "themes" , "html_data", "ui" , "crrm" 
+                    , "hotkeys" , "contextmenu" , "unique" 
+                    , "sort" ]
     });
     
     var rootNode = $( "#root" );
+    
     $project_current = rootNode.attr( "project" );  // encontrar o identificador do projeto
     $project_storage = rootNode.attr( "storage" );  // encontrar o identificador do storage
     
     jsTreeProject.delegate( "a" , "dblclick" , tree_file_open ); // abrir um arquivo
-    jsTreeProject.bind( "rename.jstree" , tree_file_rename );
-    jsTreeProject.bind( "remove.jstree" , tree_file_remove );
-    jsTreeProject.bind( "create.jstree" , tree_file_new );
+    //jsTreeProject.bind( "rename.jstree" , tree_file_rename );
+    //jsTreeProject.bind( "remove.jstree" , tree_file_remove );
+    //jsTreeProject.bind( "create.jstree" , tree_file_new );
+    
+    jsTreeProject.bind( "paste.jstree" , function ( e , d ) 
+    { 
+        //$( "#home" ).html( print(  ) );
+        var dir = $( d.rslt.obj );
+        
+        for( var i = 0 ; i < d.rslt.nodes.length ; i++ )
+        {
+            var file = $( d.rslt.nodes[i] );
+            projectFileMove( $copy_or_cut , dir , file );
+        }
+        
+        $copy_or_cut = 0;
+    } );
+    
+    jsTreeProject.click( function ()
+    {
+        $node_selected = $( ".jstree-clicked" ).parent();
+    });
+    
+    // -----------------------------------
+    //                MENU
+    
+    $( "#fileNew" ).click( function () 
+    { 
+        projectFileCreate( false ); 
+    });
+    
+    $( "#dirNew" ).click( function () 
+    { 
+        projectFileCreate( true ); 
+    });
 });

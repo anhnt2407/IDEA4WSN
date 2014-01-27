@@ -26,6 +26,8 @@
     <script src="/IDEA4WSN/js/jquery.splitter.js"></script>
     <script src="/IDEA4WSN/js/jquery.jstree.js"></script>
     <script src="/IDEA4WSN/js/notify.min.js"></script>
+    <script src="/IDEA4WSN/js/plupload.full.min.js"></script> <!-- PluUpload -->
+    <script src="/IDEA4WSN/js/moxie.min.js"></script>
     
     <!-- Bootstrap -->
     <script src="/IDEA4WSN/js/bootstrap.min.js"></script>
@@ -34,6 +36,10 @@
     <!-- script src="/IDEA4WSN/js/bootstrap-tabdrop.js"></script -->
     
     <!-- Application -->
+    <script src="/IDEA4WSN/js/project/file.create.js"></script>
+    <script src="/IDEA4WSN/js/project/file.rename.js"></script>
+    <script src="/IDEA4WSN/js/project/file.delete.js"></script>
+    <script src="/IDEA4WSN/js/project/file.move.js"></script>
     <script src="/IDEA4WSN/js/app.util.js"></script>
     <script src="/IDEA4WSN/js/app.notification.js"></script>
     <script src="/IDEA4WSN/js/app.project.js"></script>

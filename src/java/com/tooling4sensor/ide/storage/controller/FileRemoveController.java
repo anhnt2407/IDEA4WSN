@@ -1,4 +1,4 @@
-package com.tooling4sensor.ide.project.controller;
+package com.tooling4sensor.ide.storage.controller;
 
 import com.tooling4sensor.ide.storage.StorageAccount;
 import com.tooling4sensor.ide.storage.dao.StorageDAO;

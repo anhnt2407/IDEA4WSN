@@ -3,7 +3,10 @@ package com.tooling4sensor.ide.storage.types.local;
 import com.tooling4sensor.ide.storage.types.StorageFile;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Esta classe representa um arquivo no padrão StorageFile.
@@ -93,4 +96,16 @@ public class LocalStorageFile extends StorageFile
         return l;
     }
     
+    @Override
+    public Map<String,String> getProperties()
+    {
+        Map<String,String> map = new HashMap<>();
+        map.put( "name" , file.getName() );
+        map.put( "extension" , getExtension() );
+        map.put( "size" , file.length() + "" );
+        map.put( "Path" , getPath() );
+        map.put( "Last Modification" , new Date( file.lastModified() ).toString() );
+        
+        return map;
+    }
 }

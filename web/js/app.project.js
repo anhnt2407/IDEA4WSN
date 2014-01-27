@@ -8,3 +8,12 @@ function openProjectWindow( id )
 }
 
 
+function showDialogUrl( $URL )
+{
+    $("#dialog").html("");
+    $("#dialog").dialog("option", "title", "Loading...").dialog( "open" );
+    $("#dialog").load( $URL , function() {
+         $(this).dialog( "option" , "title" , $(this).find("h2").text() );
+         $(this).find("h2").remove();
+    });
+}

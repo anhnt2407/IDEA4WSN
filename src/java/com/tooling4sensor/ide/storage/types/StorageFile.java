@@ -1,6 +1,7 @@
 package com.tooling4sensor.ide.storage.types;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -37,7 +38,7 @@ public abstract class StorageFile
         }
     }
     
-    public void setData( String data ) throws Exception
+    public void setData( byte[] data ) throws Exception
     {
         if( isFile() )
         {
@@ -54,14 +55,14 @@ public abstract class StorageFile
         String name = getName();
         
         if( isDirectory() 
-                || ( name != null ? true : name.isEmpty() ) )
+                || ( name == null ? true : name.isEmpty() ) )
         {
             return "";
         }
         else
         {
             int pos = name.lastIndexOf( "." );
-            return name.substring( pos );
+            return name.substring( pos + 1 );
         }
     }
     
@@ -75,6 +76,8 @@ public abstract class StorageFile
     public abstract boolean isDirectory();
     public abstract boolean isFile();
     public abstract boolean hasChildren();
+    
+    public abstract Map<String,String> getProperties();
     
     public abstract List<StorageFile> getChildren();
 }

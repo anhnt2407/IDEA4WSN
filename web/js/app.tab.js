@@ -42,20 +42,8 @@ $(function () {
         }
     });
 
-    registerComposeButtonEvent();
     registerCloseEvent();
 });
-
-//this method will demonstrate how to add tab dynamically
-function registerComposeButtonEvent()
-{
-    /* just for this demo */
-    $( '#composeButton' ).click( function ( e ) 
-            { 
-                e.preventDefault(); 
-                openFile( 'teste.txt' , '/Blink/teste.txt' );
-            } );
-}
 
 //this method will register event on close icon on the tab..
 function registerCloseEvent()

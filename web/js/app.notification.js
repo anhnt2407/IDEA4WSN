@@ -4,6 +4,21 @@
 // --------------------------------------------------- FUNCOES
 // ---------------------------------------------------
 
+/**
+ * Ira mostrar uma notificação que ainda nao foi implementado.
+ * 
+ */
+function notification_notImplementYet()
+{
+    notification( "Not Implement Yet!" , "warn" );
+}
+
+/**
+ * Notificação do sistema
+ * 
+ * @param {String} msg      The message that will be showed
+ * @param {String} type     success, info, warn, error
+ */
 function notification( msg , type )
 {
     var option = {

@@ -1,6 +1,13 @@
 <ul class="nav navbar-nav">
-    <li>
-        <a id="composeButton">New</a>
+    <li class="dropdown">
+        <a id="composeButton" class="dropdown-toggle" data-toggle="dropdown">
+            New <b class="caret"></b>
+        </a>
+        
+        <ul class="dropdown-menu">
+            <li><a id="fileNew" href="#">File</a></li>
+            <li><a id="dirNew" href="#">Directory</a></li>
+        </ul>
     </li>
     
     <li>

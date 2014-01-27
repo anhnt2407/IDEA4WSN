@@ -1,4 +1,4 @@
-package com.tooling4sensor.ide.project.controller;
+package com.tooling4sensor.ide.storage.controller;
 
 import com.tooling4sensor.ide.fileViewType.FileViewFactory;
 import com.tooling4sensor.ide.storage.StorageAccount;

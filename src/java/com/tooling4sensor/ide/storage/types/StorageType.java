@@ -23,7 +23,7 @@ public interface StorageType
     // -------------------- File
     public void createFile( String path ) throws Exception;
     public byte[] getData( String path ) throws Exception;
-    public void setData( String path , String data ) throws Exception;
+    public void setData( String path , byte[] data ) throws Exception;
     
     // -------------------- Diretory
     public void createDir( String path ) throws Exception;

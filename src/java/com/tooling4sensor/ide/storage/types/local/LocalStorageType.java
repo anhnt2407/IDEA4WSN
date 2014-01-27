@@ -6,7 +6,7 @@ import com.tooling4sensor.ide.storage.types.StorageType;
 import com.tooling4sensor.ide.storage.types.StorageValidate;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 
 /**
  * Esta classe é responsável por conectar na Storage alvo.
@@ -212,13 +212,18 @@ public class LocalStorageType implements StorageType
     }
 
     @Override
-    public void setData( String path , String data ) throws Exception
+    public void setData( String path , byte[] data ) throws Exception
     {
-        FileWriter writer = new FileWriter( file( path ) );
-        writer.write( data );
-        writer.close();
+        File f = file( path );
         
-        writer = null;
+        if( !f.exists() )
+        {
+            f.createNewFile();
+        }
+        
+        FileOutputStream fos = new FileOutputStream( f );
+        fos.write( data );
+        fos = null;
     }
     
     private void deleteFile( File f ) throws Exception

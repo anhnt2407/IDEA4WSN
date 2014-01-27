@@ -13,6 +13,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table( name="Project_file_openned" , schema="idea4wsn" )
+@Deprecated
 public class FileOpenned implements Serializable
 {
     @Id
