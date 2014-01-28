@@ -16,7 +16,7 @@ $(function () {
     $("#myTab").on("click", "a", function (e) {
         e.preventDefault();
 
-        $(this).tab('show');
+        $(this).tab( 'show' );
         $currentTab = $(this);
     });
 
@@ -43,14 +43,25 @@ $(function () {
     });
 
     registerCloseEvent();
+    
+    $( "#buttonSaveFile" ).click( saveTabSelected );
 });
 
 //this method will register event on close icon on the tab..
 function registerCloseEvent()
 {
-    $( ".closeTab" ).click(function (){
+    $( ".closeTab" ).click(function ()
+    {
         $tabToRemove = $(this).parent();             //close the tab whose close icon is clicked
-        $( "#dialog-tabClose" ).dialog( "open" );
+        
+        if( tab_isValueChanged( $tabToRemove ) )
+        {
+            $( "#dialog-tabClose" ).dialog( "open" );
+        }
+        else
+        {
+            removeTab( $tabToRemove , false );
+        }
     });
 }
 
@@ -69,26 +80,18 @@ function openFile( name , path )
     $('.nav-tabs').append( tabTitle );
     $('.tab-content').append('<div class="tab-pane" id="' + tabId + '"></div>');
 
-    var urlPath = "/IDEA4WSN/storage/" + $project_storage + "/file?file=";
+    var urlPath = "/IDEA4WSN/storage/" + $project_storage + "/file?path=";
     craeteNewTabAndLoadUrl( "" , urlPath + path , "#" + tabId );
 
-    $(this).tab( 'show' );
     showTab( tabId );
     registerCloseEvent();
 };
 
 function saveFile( path , conteudo )
 {
-    var urlPath = document.URL;                             // URL do projeto
-    var hashIndex = document.URL.indexOf( '#' );            // Remove caso haja uma #tag
-
-    if( hashIndex !== -1 )
-    {
-        urlPath = document.URL.substr( 0 , hashIndex );
-    }
-    
     // Enviar o conteudo e o caminho do arquivo para o servidor
-    $.post( urlPath + "/file/save" , { file: path , data: conteudo } )
+    $.post( "/IDEA4WSN/storage/" + $project_storage + "/file/save" 
+          , { file: path , data: conteudo } )
       .done( function() {       //Caso seja enviado com sucesso!
         notification( "The file was saved." , "success" );
       })
@@ -130,7 +133,8 @@ function changePathToId( path )
 //where the content resides
 function showTab( tabId )
 {
-    $('#myTab a[href="#' + tabId + '"]').tab( 'show' );
+    $currentTab = $('#myTab a[href="#' + tabId + '"]');
+    $currentTab.tab( 'show' );
 }
 //return current active tab
 function getCurrentTab()
@@ -184,15 +188,48 @@ function removeTab( tab , isSaveFile )
     //Primeiro, salva o arquivo
     if( isSaveFile )
     {
-        var tabData     = $( tabContentId + "_data" )[0];
-        var tabConteudo = tabData.innerHTML;                    // Conteudo do arquivo
-        var tabFile     = $( tabData ).attr( "file" );          // Caminho imaginario do arquivo
+        var tabData = $( tabContentId + "_data" )[0];
+        var path    = $( tabData ).attr( "file" );    // Caminho imaginario do arquivo
         
-        saveFile( tabFile , tabConteudo );
+        var e  = jQuery.Event( "saveFile" );
+        e.path = path;
+        
+        $( tabContentId + "_data" ).trigger( e );      // save event
     }
     
     //Depois, remove a aba
     tab.parent().remove();              // Remove li of tab
     $('#myTab a:last').tab( 'show' );   // Select first tab
     $( tabContentId ).remove();         // Remove respective tab content
+}
+
+function saveTabSelected()
+{
+    if( !$currentTab )
+    {
+        notification( "Please, select a tab!" , "warn" );
+        return ;
+    }
+    
+    var tabContentId = $currentTab.attr( "href" );
+    
+    var tabData = $( tabContentId + "_data" )[0];
+    var path    = $( tabData ).attr( "file" );    // Caminho imaginario do arquivo
+
+    var e  = jQuery.Event( "saveFile" );
+    e.path = path;
+
+    $( tabContentId + "_data" ).trigger( e );      // save event
+}
+
+function tab_isValueChanged( tab )
+{
+    var tabContentId = tab.attr( "href" );
+    
+    var e  = jQuery.Event( "isValueChanged" );
+    e.result = false;
+    
+    $( tabContentId + "_data" ).trigger( e );
+    
+    return e.result;
 }

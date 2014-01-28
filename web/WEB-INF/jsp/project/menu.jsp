@@ -15,6 +15,10 @@
     </li>
     
     <li>
+        <a id="buttonSaveFile">Save</a>
+    </li>
+    
+    <li>
         <a href="#contact">Evaluate</a>
     </li>
 </ul>

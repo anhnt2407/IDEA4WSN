@@ -31,9 +31,9 @@ public class FileOpenController
     }
     
     @RequestMapping( value = "/storage/{id}/file" , method = RequestMethod.GET )
-    public String open( @PathVariable Long id , String file , HttpServletRequest request, Model model ) throws Exception
+    public String open( @PathVariable Long id , String path , HttpServletRequest request, Model model ) throws Exception
     {
-        if( file == null ? true : file.isEmpty() )
+        if( path == null ? true : path.isEmpty() )
         {
             throw new Exception( "File is illegal, because it is null or empty." );
         }
@@ -45,7 +45,7 @@ public class FileOpenController
         StorageType type = StorageFactory.getInstance().get( storage.getType() );
         type.connect( storage );
         
-        StorageFile sf = type.open( file );
+        StorageFile sf = type.open( path );
         
         if( sf.isDirectory() )
         {
@@ -53,7 +53,7 @@ public class FileOpenController
         }
         
         // ---------------------------- Mostrar para o usuario o dado do arquivo
-        String pathId = createDataId( file );
+        String pathId = createDataId( path );
         
         model.addAttribute( "id" , "tab_" + pathId + "_data" );
         model.addAttribute( "path" , sf.getPath() );

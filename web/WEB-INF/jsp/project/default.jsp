@@ -40,6 +40,7 @@
     <script src="/IDEA4WSN/js/project/file.rename.js"></script>
     <script src="/IDEA4WSN/js/project/file.delete.js"></script>
     <script src="/IDEA4WSN/js/project/file.move.js"></script>
+    
     <script src="/IDEA4WSN/js/app.util.js"></script>
     <script src="/IDEA4WSN/js/app.notification.js"></script>
     <script src="/IDEA4WSN/js/app.project.js"></script>
@@ -47,6 +48,11 @@
     <script src="/IDEA4WSN/js/type/project.type.js"></script>
     <script src="/IDEA4WSN/js/type/directory.type.js"></script>
     <script src="/IDEA4WSN/js/app.jstree.js"></script>
+    <script src="/IDEA4WSN/js/hash.md5.js"></script>
+    
+    <script src="/IDEA4WSN/js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+     <script src="/IDEA4WSN/js/ace/theme-monokai.js" type="text/javascript" charset="utf-8"></script>
+    
     
     <script>
         jQuery( function( $ )
@@ -109,7 +115,14 @@
         margin: 0 auto -60px;
       }
 
+      .editor {
+        position: absolute;
+        width: 100%;
+        height: 93%;
+      }
+      
       #composeButton ,
+      #buttonSaveFile ,
       #buttonOpenProject ,
       #buttonReloadProject
       {
