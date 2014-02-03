@@ -9,7 +9,8 @@ function projectFileCreate( isDirectory )
         notification( "Please, select a directory!" , "warn" );
         return ;
     }
-    if( !tree_isDirectory( $node_selected ) )
+    if( !tree_isDirectory( $node_selected )
+            && !tree_isProject( $node_selected ) )
     {
         notification( "Please, select a directory, not a file!" , "warn" );
         return ;

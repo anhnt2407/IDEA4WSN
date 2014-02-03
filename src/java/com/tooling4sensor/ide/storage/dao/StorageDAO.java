@@ -56,7 +56,7 @@ public class StorageDAO
         }
     }
     
-    public void delete( long storageId , long userId )
+    public void delete( long storageId , long userId ) throws Exception
     {
         StorageAccount storage = get( storageId , userId ); // A Logica nao deveria esta aqui!
         
@@ -79,7 +79,7 @@ public class StorageDAO
         }
     }
     
-    public StorageAccount get( long storageId , long userId )
+    public StorageAccount get( long storageId , long userId ) throws Exception
     {
         EntityManager manager = factory.createEntityManager();
 
@@ -87,9 +87,13 @@ public class StorageDAO
         {
             StorageAccount p = manager.find( StorageAccount.class, storageId );
             
-            if( p.getUserId() != userId )
+            if( p == null )
             {
-                return null;
+                throw new Exception( "Storage Account didn't find." );
+            }
+            else if( p.getUserId() != userId )
+            {
+                throw new Exception( "this Storage Account isn't yours." );
             }
             
             return p;
