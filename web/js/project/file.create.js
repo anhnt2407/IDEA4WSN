@@ -9,12 +9,12 @@ function projectFileCreate( isDirectory )
         notification( "Please, select a directory!" , "warn" );
         return ;
     }
-    if( !tree_isDirectory( $node_selected ) )
+    if( !tree_isDirectory( $node_selected ) && !tree_isProject( $node_selected ) )
     {
         notification( "Please, select a directory, not a file!" , "warn" );
         return ;
     }
-    
+        
     // -------- Qual é o nome do arquivo
     var filename = prompt( "Name" , "" );
     if ( filename === null )             // cancelled!

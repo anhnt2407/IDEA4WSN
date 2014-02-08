@@ -1,6 +1,7 @@
 package com.tooling4sensor.ide.user;
 
 import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,10 +18,15 @@ public class Account implements Serializable
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    
+    @Column(name = "USERID")
     private long userId;
+    @Column(name = "EMAIL")
     private String email;
-    private String password;
+    @Column(name = "NAME")
     private String name;
+    @Column(name = "PASSWORD")
+    private String password;
     
     public Account()
     {
@@ -66,5 +72,17 @@ public class Account implements Serializable
     {
         this.name = name;
     }
+    
+    public Account(long userId, String name, String email, String password) {
+        this.userId = userId;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
+    
+    public Account(long userId) {
+        this.userId = userId;
+    }
+    
     
 }

@@ -106,7 +106,7 @@ public class ProjectDAO
 
         try
         {
-            String sql = "SELECT * FROM idea4wsn.Project WHERE userid = " + userId;
+            String sql = "SELECT * FROM idea4wsn.Project WHERE userid = " + userId + " LIMIT 1000";
             
             Query query = manager.createNativeQuery( sql , Project.class );
             return query.getResultList();

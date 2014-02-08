@@ -52,7 +52,8 @@
     
     <script src="/IDEA4WSN/js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
      <script src="/IDEA4WSN/js/ace/theme-monokai.js" type="text/javascript" charset="utf-8"></script>
-    
+         <script src="/IDEA4WSN/js/ace/theme-nesc.js" type="text/javascript" charset="utf-8"></script>
+
     
     <script>
         jQuery( function( $ )
@@ -186,7 +187,7 @@
 				  ${username} <b class="caret"></b>
 				  </a>
               <ul class="dropdown-menu">
-                <li><a href="#">Setting</a></li>
+                <li><a href="#">Settings</a></li>
                 <li class="divider"></li>
                 <li><a href="/IDEA4WSN/logout">Logout</a></li>
               </ul>

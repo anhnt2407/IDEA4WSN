@@ -62,7 +62,7 @@ public class FileOpennedDAO
 
         try
         {
-            String sql = "SELECT * FROM idea4wsn.Project_file_openned WHERE project_id = " + projectId;
+            String sql = "SELECT * FROM idea4wsn.Project_file_openned WHERE project_id = " + projectId + " LIMIT 1000";
             
             Query query = manager.createNativeQuery( sql , FileOpenned.class );
             return query.getResultList();

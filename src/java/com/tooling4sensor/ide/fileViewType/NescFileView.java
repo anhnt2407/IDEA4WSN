@@ -18,7 +18,7 @@ public class NescFileView implements FileView
     @Override
     public boolean isItExtension( String ext )
     {
-        return ".nc".equalsIgnoreCase( ext );
+        return "nc".equalsIgnoreCase( ext );
     }
 
     @Override
@@ -31,7 +31,7 @@ public class NescFileView implements FileView
     @Override
     public String getJSP()
     {
-        return "project/view/nc";
+           return "project/fileView/nc";
     }
     
 }

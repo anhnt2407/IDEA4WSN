@@ -1,53 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app version="3.0" 
-         xmlns="http://java.sun.com/xml/ns/javaee" 
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
-    
+<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
     <!-- |||||||||||||||||||| FILTER |||||||||||||||||||| -->
-    
-    <filter>  
-        <filter-name>encodingFilter</filter-name>  
-        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>  
-        <init-param>  
-           <param-name>encoding</param-name>  
-           <param-value>UTF-8</param-value>  
-        </init-param>  
-        <init-param>  
-           <param-name>forceEncoding</param-name>  
-           <param-value>true</param-value>  
-        </init-param>  
-    </filter>  
-    
-    <filter-mapping>  
-        <filter-name>encodingFilter</filter-name>  
-        <url-pattern>/*</url-pattern>  
+    <filter>
+        <filter-name>encodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>encodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
     </filter-mapping>
-    
     <!-- |||||||||||||||||||| SERVLET |||||||||||||||||||| -->
-    
     <servlet>
-      <servlet-name>dispatcher</servlet-name>
-      <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-      <init-param>
-          <param-name>contextConfigLocation</param-name>
-          <param-value>/WEB-INF/spring-context.xml</param-value>
-      </init-param>
-      <load-on-startup>1</load-on-startup>
+        <servlet-name>dispatcher</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>/WEB-INF/spring-context.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
     </servlet>
-    
     <servlet-mapping>
         <servlet-name>dispatcher</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
-    
     <!-- |||||||||||||||||||| OTHERS |||||||||||||||||||| -->
-    
     <session-config>
-        <session-timeout>300</session-timeout> <!-- 5 minutos -->
+        <session-timeout>300</session-timeout>
+        <!-- 5 minutos -->
     </session-config>
-    
     <welcome-file-list>
         <welcome-file>redirect.jsp</welcome-file>
     </welcome-file-list>
+    <resource-ref>
+        <res-ref-name>MySQL - Localhost</res-ref-name>
+        <res-type>javax.sql.ConnectionPoolDataSource</res-type>
+        <res-auth>Container</res-auth>
+        <res-sharing-scope>Shareable</res-sharing-scope>
+    </resource-ref>
 </web-app>
