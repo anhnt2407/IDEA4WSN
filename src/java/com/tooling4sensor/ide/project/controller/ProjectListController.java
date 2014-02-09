@@ -64,4 +64,11 @@ public class ProjectListController
         return "project/list";
     }
     
+    @RequestMapping( value = "/project/evaluate" )
+    public String evaluate( HttpServletRequest request , Model model )
+    {
+        index( request , model );
+        return "project/evaluate";
+    }
+    
 }

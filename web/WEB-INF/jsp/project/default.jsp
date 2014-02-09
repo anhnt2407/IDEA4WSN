@@ -125,7 +125,8 @@
       #composeButton ,
       #buttonSaveFile ,
       #buttonOpenProject ,
-      #buttonReloadProject
+      #buttonReloadProject ,
+      #buttonEvaluate
       {
           cursor: pointer;
       }

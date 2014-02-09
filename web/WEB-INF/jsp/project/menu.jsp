@@ -19,6 +19,6 @@
     </li>
     
     <li>
-        <a href="#contact">Evaluate</a>
+        <a id="buttonEvaluate" class="dialogify" href="/IDEA4WSN/project/evaluate">Evaluate</a>
     </li>
 </ul>

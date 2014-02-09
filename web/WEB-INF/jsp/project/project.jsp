@@ -14,21 +14,11 @@
           </div>
           
           <div id="tabs" class="tabbable">
-              
               <ul id="myTab" class="nav nav-tabs">
-                  
-                <li class="active">
-                    <a href="#home" data-toggle="tab">
-                        <button class="close closeTab" type="button" >×</button>
-                        Home
-                    </a>
-                </li>
-                
               </ul>
-
               <!-- Tab panes -->
               <div class="tab-content">
-                <div class="tab-pane active" id="home">...</div>
+                <div class="tab-pane active" id="home"></div>
               </div>
                 
           </div>
