@@ -25,6 +25,7 @@ public class FileViewFactory
         viewList = new LinkedList<>();
         viewList.add( new NescFileView() );
         viewList.add( new ImageFileView() );
+        viewList.add( new WsnFileView() );
         // PUT HERE OTHERS FILE VIEWS!
         
         defaultView = new DefaultFileView();

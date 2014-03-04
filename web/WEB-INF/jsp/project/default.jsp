@@ -28,18 +28,21 @@
     <script src="/IDEA4WSN/js/notify.min.js"></script>
     <script src="/IDEA4WSN/js/plupload.full.min.js"></script> <!-- PluUpload -->
     <script src="/IDEA4WSN/js/moxie.min.js"></script>
+    <script src="/IDEA4WSN/js/jcanvas.min.js"></script>
     
     <!-- Bootstrap -->
     <script src="/IDEA4WSN/js/bootstrap.min.js"></script>
     <!-- script src="/IDEA4WSN/js/bootstrap-dropdown.js"></script -->
     <!-- script src="/IDEA4WSN/js/bootstrap-tab.js"></script -->
     <!-- script src="/IDEA4WSN/js/bootstrap-tabdrop.js"></script -->
-    
+        
     <!-- Application -->
     <script src="/IDEA4WSN/js/project/file.create.js"></script>
     <script src="/IDEA4WSN/js/project/file.rename.js"></script>
     <script src="/IDEA4WSN/js/project/file.delete.js"></script>
     <script src="/IDEA4WSN/js/project/file.move.js"></script>
+    <script src="/IDEA4WSN/js/project/network.js"></script>
+    <script src="/IDEA4WSN/js/project/deployment.js"></script>
     
     <script src="/IDEA4WSN/js/app.util.js"></script>
     <script src="/IDEA4WSN/js/app.notification.js"></script>
@@ -148,6 +151,11 @@
             height :70%;
             background-color: #E6E6E6;
             border-right: 2px solid #BFBFBF;
+        }
+        
+        canvas
+        {
+            border: #000 solid thin;
         }
     </style>
     

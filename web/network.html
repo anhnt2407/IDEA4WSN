@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Network</title>
+        
+        <link href="css/jquery-ui.css" rel="stylesheet" />
+        <link href="css/bootstrap.min.css" rel="stylesheet" />
+        
+        <style>
+            canvas
+            {
+                border: #000 solid thin;
+            }
+        </style>
+        
+        <script src="js/jquery.min.js"></script>
+        <script src="js/jquery-ui.js"></script>
+        <script src="js/jcanvas.min.js"></script>
+        <script src="js/project/network.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        
+        <script>
+            $( function ()
+            {
+               $( "#network" ).wsn();
+               
+               $( "#configuration_dialog" ).dialog( {
+                    autoOpen: false ,
+                    height  : 300  ,
+                    width   : 350  ,
+                    modal   : true ,
+                    buttons : {
+                      ok : function() {
+                        $( this ).dialog( "close" );
+                      } ,
+                      cancel : function() {
+                        $( this ).dialog( "close" );
+                      }
+                    }
+                });
+            });
+        </script>
+    </head>
+    
+    <body>    
+        <div id="network" class="container">
+            <h1>Network</h1>
+            
+            <div class="row">
+                <div class="col-xs-6 col-md-4" style="margin-bottom: 5px">
+                    <input type="button" class="btn btn-default" name="conf" value="Configuration" />
+                    <input type="button" class="btn btn-default" name="deploy" value="Deployment" />
+                    <input type="hidden" name="id" value="topology01" />
+                </div>
+
+                <div class="col-xs-6 col-md-4 btn-group" data-toggle="buttons">
+                    <label class="btn btn-primary active">
+                        <input type="radio" name="action" value="NODE" checked />
+                        Sensor node
+                    </label>
+
+                    <label class="btn btn-primary">
+                        <input type="radio" name="action" value="SINK" />
+                        Base Station
+                    </label>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-xs-12 col-md-8">
+                    <canvas width="600" height="400">
+                        Yout browers doest not supported canvas tag!
+                    </canvas>
+                </div>
+            
+                <div class="col-xs-6 col-md-4">
+
+                    <div class="input-group">
+                        <span class="input-group-addon">Node ID</span>
+                        <input type="text" name="nodeId" class="form-control" readonly />
+                    </div>
+                    
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th>Porperty Name</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <!-- DATA -->
+                        </tbody>
+                    </table>
+
+                    <div>
+                        <input type="button" name="delete" value="Delete" class="btn btn-danger" />
+                        <input type="button" name="save" value="Save"  class="btn btn-success" />
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        
+        <div id="configuration_dialog" title="Configuration">
+            Routing Protocol:
+            <select>
+                <option></option>
+            </select>
+            
+            Link Protocol:
+            <select>
+                <option></option>
+            </select>
+            
+        </div>
+    </body> 
+</html>

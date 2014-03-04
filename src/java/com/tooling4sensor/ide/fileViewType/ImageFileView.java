@@ -16,10 +16,10 @@ public class ImageFileView implements FileView
     public ImageFileView()
     {
         extSet = new HashSet<>();
-        extSet.add( ".jpeg" );
-        extSet.add( ".jpg" );
-        extSet.add( ".gif" );
-        extSet.add( ".png" );
+        extSet.add( "jpeg" );
+        extSet.add( "jpg" );
+        extSet.add( "gif" );
+        extSet.add( "png" );
     }
     
     @Override
@@ -44,7 +44,7 @@ public class ImageFileView implements FileView
     @Override
     public String getJSP()
     {
-        return "project/view/default";
+        return "project/view/image";
     }
     
 }

@@ -22,7 +22,7 @@ import java.io.FileOutputStream;
  */
 public class LocalStorageType implements StorageType
 {
-    public static String PATH = "F:\\Dropbox\\desenvolvimento\\IDEA4WSN-dados";   //Diretório onde todos os arquivos estão.
+    public static String PATH = "/opt/idea4wsn/";   //Diretório onde todos os arquivos estão.
     private StorageAccount storage;                        //Configuracao de acesso (i.e., id do usuario).
     private File rootDir;                           //Diretorio do usuário
     
