@@ -2,6 +2,7 @@ package com.tooling4sensor.ide.storage;
 
 import java.io.Serializable;
 import java.util.Map;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,12 +19,25 @@ public class StorageAccount implements Serializable
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
     private long storageId;
+    
+    @Column
     private long userId;
+    
+    @Column
     private int type;
+    
+    @Column
     private String name;
+    
+    @Column
     private String login;
+    
+    @Column
     private String password;
+    
+    @Column
     private String information;
     
     public StorageAccount()

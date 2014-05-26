@@ -18,13 +18,15 @@ public class Account implements Serializable
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    
     @Column(name = "USERID")
     private long userId;
+    
     @Column(name = "EMAIL")
     private String email;
+    
     @Column(name = "NAME")
     private String name;
+    
     @Column(name = "PASSWORD")
     private String password;
     
@@ -33,6 +35,19 @@ public class Account implements Serializable
         // do nothing
     }
 
+    public Account(long userId, String name, String email, String password)
+    {
+        this.userId = userId;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
+    
+    public Account( long userId )
+    {
+        this.userId = userId;
+    }
+    
     public long getUserId()
     {
         return userId;
@@ -72,17 +87,5 @@ public class Account implements Serializable
     {
         this.name = name;
     }
-    
-    public Account(long userId, String name, String email, String password) {
-        this.userId = userId;
-        this.name = name;
-        this.email = email;
-        this.password = password;
-    }
-    
-    public Account(long userId) {
-        this.userId = userId;
-    }
-    
     
 }

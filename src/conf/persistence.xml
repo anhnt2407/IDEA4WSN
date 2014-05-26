@@ -3,13 +3,20 @@
   <persistence-unit name="idea4wsn" transaction-type="JTA">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <jta-data-source>MySQL - Localhost</jta-data-source>
+    
     <class>com.tooling4sensor.ide.user.Account</class>
+    <class>com.tooling4sensor.ide.project.Project</class>
+    <class>com.tooling4sensor.ide.storage.StorageAccount</class>
+    <class>com.tooling4sensor.ide.project.FileOpenned</class>
+    
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    
     <properties>
       <property name="javax.persistence.schema-generation.database.action" value="create"/>
       <property name="eclipselink.logging.level" value="FINEST"/>
       <!-- enable SQL parameter binding visibility logging to override ER 329852 -->
       <property name="eclipselink.logging.parameters" value="true"/>
     </properties>
+    
   </persistence-unit>
 </persistence>

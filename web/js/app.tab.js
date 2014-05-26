@@ -45,6 +45,7 @@ $(function () {
     registerCloseEvent();
     
     $( "#buttonSaveFile" ).click( saveTabSelected );
+    $( "#buttonSuggestions" ).click( showSuggestions );
 });
 
 //this method will register event on close icon on the tab..
@@ -232,4 +233,25 @@ function tab_isValueChanged( tab )
     $( tabContentId + "_data" ).trigger( e );
     
     return e.result;
+}
+
+// -----------------------------------
+// ----------------------------------- SUGGESTIONS
+// -----------------------------------
+
+function showSuggestions()
+{
+    if( !$currentTab )
+    {
+        notification( "Please, select a tab!" , "warn" );
+        return ;
+    }
+    
+    var tabContentId = $currentTab.attr( "href" );
+    
+    var tabData = $( tabContentId + "_data" )[0];
+    var path    = $( tabData ).attr( "file" );
+
+    var $URL = href="/IDEA4WSN/storage/"+ $project_storage +"/file/suggestions?file=" + path;
+    showDialogUrl( $URL );
 }

@@ -39,7 +39,7 @@ function network_init( el )
     var canvasJQuery = elJQuery.find( "canvas" );
     
     var value        = elJQuery.find( "input:hidden[name=id]" ).val();
-    topologyStorage[ value ] = { properties : {} 
+    topologyStorage[ value ] = { properties : { size : 1 } 
                                , nodes : {} 
                                , counter : 0 
                                , nodeDefault : network_nodeDefault

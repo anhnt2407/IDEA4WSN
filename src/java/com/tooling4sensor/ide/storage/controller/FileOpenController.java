@@ -31,7 +31,10 @@ public class FileOpenController
     }
     
     @RequestMapping( value = "/storage/{id}/file" , method = RequestMethod.GET )
-    public String open( @PathVariable Long id , String path , HttpServletRequest request, Model model ) throws Exception
+    public String open( @PathVariable Long id 
+                       , String path 
+                       , HttpServletRequest request
+                       , Model model ) throws Exception
     {
         if( path == null ? true : path.isEmpty() )
         {

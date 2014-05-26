@@ -1,5 +1,6 @@
 package com.tooling4sensor.ide.storage.types.local;
 
+import com.tooling4sensor.ide.IDE;
 import com.tooling4sensor.ide.storage.StorageAccount;
 import com.tooling4sensor.ide.storage.types.StorageFile;
 import com.tooling4sensor.ide.storage.types.StorageType;
@@ -22,8 +23,7 @@ import java.io.FileOutputStream;
  */
 public class LocalStorageType implements StorageType
 {
-    public static String PATH = "/opt/idea4wsn/";   //Diretório onde todos os arquivos estão.
-    private StorageAccount storage;                        //Configuracao de acesso (i.e., id do usuario).
+    private StorageAccount storage;                  //Configuracao de acesso (i.e., id do usuario).
     private File rootDir;                           //Diretorio do usuário
     
     public LocalStorageType()
@@ -71,7 +71,7 @@ public class LocalStorageType implements StorageType
         
         this.storage = storage;
         
-        rootDir = new File( PATH + this.storage.getUserId() );
+        rootDir = new File( IDE.PROJECT_PATH + this.storage.getUserId() );
         
         if( !rootDir.exists() )
         {

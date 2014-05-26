@@ -12,7 +12,7 @@
             </label>
 
             <label class="btn btn-primary">
-                <input type="radio" name="action" value="SINK" />
+                <input type="radio" name="action" value="BS" />
                 Base Station
             </label>
         </div>

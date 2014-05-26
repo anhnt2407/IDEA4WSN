@@ -35,7 +35,7 @@ var deployment =
                   
                   nodes[ "node1" ] = $.extend( {} , param.nodeDefault );
                   nodes[ "node1" ].id       = 1;
-                  nodes[ "node1" ].nodeType = "SINK";
+                  nodes[ "node1" ].nodeType = "BS";
                   nodes[ "node1" ].X = param.X + param.sinkX;
                   nodes[ "node1" ].Y = param.Y + param.sinkY;
                   

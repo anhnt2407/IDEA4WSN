@@ -127,6 +127,7 @@
       
       #composeButton ,
       #buttonSaveFile ,
+      #buttonSuggestions ,
       #buttonOpenProject ,
       #buttonReloadProject ,
       #buttonEvaluate

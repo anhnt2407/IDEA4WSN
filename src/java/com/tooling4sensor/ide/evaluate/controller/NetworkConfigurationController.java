@@ -1,4 +1,4 @@
-package com.tooling4sensor.ide.evaluate;
+package com.tooling4sensor.ide.evaluate.controller;
 
 import br.cin.ufpe.wsn2cpn.layer.LayerConfiguration;
 import br.cin.ufpe.wsn2cpn.layer.LayerContainer;
@@ -60,6 +60,11 @@ public class NetworkConfigurationController
             for( LayerProperty l : conf.getNodeProperties() )
             {
                 txt += l.getName() + " : " + l.getDefaultValue() + " , ";
+            }
+            
+            if( "mac".equalsIgnoreCase( layerName ) )
+            {
+                txt += " range : 200";
             }
             
             txt += "} } , ";

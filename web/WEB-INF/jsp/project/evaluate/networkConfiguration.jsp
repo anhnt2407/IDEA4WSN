@@ -151,6 +151,7 @@
     function layer_getProperties()
     {
         var properties = $.extend( {} , layer_getProtocols() );
+        properties[ "size" ] = 1;
         //TODO: configuracao da confiabilidade da rede
         
         return properties;
